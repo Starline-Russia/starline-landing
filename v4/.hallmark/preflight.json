@@ -1,0 +1,15 @@
+{
+  "date": "2026-07-14",
+  "project": "Starline landing v4",
+  "framework": "Astro 7 static",
+  "font_stack": ["Source Serif 4", "Inter"],
+  "palette": "warm paper, ink, peach, restricted sienna",
+  "motion": {
+    "stance": "motion-cut at foundation",
+    "libraries": []
+  },
+  "spacing": "semantic 4pt scale",
+  "tailwind": false,
+  "design_reference": "Refero Steep style lock",
+  "tokens": "v4/tokens.css"
+}
