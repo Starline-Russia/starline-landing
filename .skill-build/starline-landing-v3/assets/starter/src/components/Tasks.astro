@@ -1,0 +1,21 @@
+---
+import { tasks } from "../data/site";
+import TaskIcon from "./TaskIcon.astro";
+---
+
+<div class="section-heading centered shell-narrow">
+  <h2>Реклама работает<br /><span>Рост бизнеса буксует</span></h2>
+  <p class="section-lead">
+    Помогаем увидеть, где эффективность каналов не превращается в новых клиентов и рост GMV.
+  </p>
+</div>
+
+<div class="task-grid shell">
+  {tasks.map((task) => (
+    <article class="task-card">
+      <div class="task-icon-wrap"><TaskIcon name={task.icon} /></div>
+      <h3>{task.title}</h3>
+      <p>{task.description}</p>
+    </article>
+  ))}
+</div>

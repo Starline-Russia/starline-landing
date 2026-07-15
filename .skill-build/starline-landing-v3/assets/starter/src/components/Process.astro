@@ -1,0 +1,19 @@
+---
+import { processSteps } from "../data/site";
+---
+
+<div class="section-heading split shell">
+  <div><p class="eyebrow dark">Как мы работаем</p><h2>От аудита к масштабированию</h2></div>
+  <p class="section-lead dark">Сначала находим точки роста, затем проверяем гипотезы и масштабируем то, что влияет на экономику.</p>
+</div>
+
+<div class="process-grid shell">
+  {processSteps.map((step, index) => (
+    <article class="process-step">
+      <span>{String(index + 1).padStart(2, "0")}</span>
+      <h3>{step.title}</h3>
+      <p>{step.text}</p>
+      <strong>{step.result}</strong>
+    </article>
+  ))}
+</div>

@@ -1,0 +1,36 @@
+---
+import { Image } from "astro:assets";
+import { cases } from "../data/site";
+---
+
+<div class="section-heading split shell">
+  <div><p class="eyebrow dark">Практика</p><h2>Кейсы, где маркетинг работал на экономику бизнеса</h2></div>
+  <p class="section-lead dark">Сохраняем контекст, применённый подход и влияние на бизнес-результат.</p>
+</div>
+
+<div class="case-list shell">
+  {cases.map((caseStudy) => (
+    <article class="case-study">
+      <header class="case-header">
+        <Image
+          class="case-image"
+          src={caseStudy.image}
+          alt={caseStudy.imageAlt}
+          width={caseStudy.width}
+          height={caseStudy.height}
+          widths={[480, 720, 960]}
+          sizes="(max-width: 760px) 100vw, 38vw"
+          loading="lazy"
+          format="webp"
+        />
+        <span>{caseStudy.category}</span>
+        <h3>{caseStudy.title}</h3>
+      </header>
+      <div class="case-body">
+        <div class="case-metric"><strong>{caseStudy.metric}</strong><span>{caseStudy.metricLabel}</span></div>
+        <ul>{caseStudy.points.map((point) => <li>{point}</li>)}</ul>
+        <blockquote>{caseStudy.quote}</blockquote>
+      </div>
+    </article>
+  ))}
+</div>

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Starline Landing v3"
+  short_description: "Build and refine the Astro Starline v3 landing"
+  default_prompt: "Use $starline-landing-v3 to create or refine a Starline v3 landing section and verify it locally."
