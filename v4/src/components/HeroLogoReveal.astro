@@ -1,0 +1,67 @@
+---
+interface Props {
+  showControls?: boolean;
+}
+
+const { showControls = false } = Astro.props;
+---
+
+<div class="hero__visual hero-logo-reveal" data-logo-reveal data-reveal>
+  <figure
+    class="hero-logo-reveal__surface"
+    data-logo-reveal-surface
+    role="img"
+    aria-labelledby="hero-logo-title hero-logo-description"
+  >
+    <span id="hero-logo-title" class="visually-hidden">Знак Starline</span>
+    <span id="hero-logo-description" class="visually-hidden">
+      Персиковый знак Starline при наведении открывает фиолетовую версию под ним.
+    </span>
+    <img
+      class="hero-logo-reveal__layer hero-logo-reveal__layer--violet"
+      data-logo-layer="violet"
+      src="/assets/logo/8-1.png"
+      alt=""
+      width="1024"
+      height="1024"
+      draggable="false"
+      aria-hidden="true"
+    />
+    <img
+      class="hero-logo-reveal__layer hero-logo-reveal__layer--peach"
+      data-logo-layer="peach"
+      src="/assets/logo/8-1-peach.png"
+      alt=""
+      width="1024"
+      height="1024"
+      draggable="false"
+      aria-hidden="true"
+    />
+  </figure>
+
+  {showControls && (
+    <aside class="reveal-inspector" data-reveal-inspector aria-label="Настройка эффекта просвечивания">
+      <div class="reveal-inspector__heading">
+        <strong>Просвечивание</strong>
+        <span>Hero preview</span>
+      </div>
+
+      <label class="reveal-inspector__control">
+        <span>Радиус <output data-reveal-value="radius">112 px</output></span>
+        <input data-reveal-control="radius" type="range" min="72" max="240" step="1" value="112" />
+      </label>
+
+      <label class="reveal-inspector__control">
+        <span>Мягкость <output data-reveal-value="feather">36 px</output></span>
+        <input data-reveal-control="feather" type="range" min="0" max="64" step="1" value="36" />
+      </label>
+
+      <label class="reveal-inspector__control">
+        <span>Интенсивность <output data-reveal-value="intensity">100%</output></span>
+        <input data-reveal-control="intensity" type="range" min="20" max="100" step="1" value="100" />
+      </label>
+
+      <button class="reveal-inspector__reset" data-reveal-reset type="button">Сбросить</button>
+    </aside>
+  )}
+</div>

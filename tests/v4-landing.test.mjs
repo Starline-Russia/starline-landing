@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
@@ -104,15 +105,16 @@ test("v4 header uses one accessible DOM tree for mobile menu and scroll morph", 
   assert.doesNotMatch(header, /<header[\s\S]*<header/);
 });
 
-test("v4 hero is semantic, factual, and uses a native analytical illustration", async () => {
+test("v4 hero is semantic, factual, and uses the approved logo reveal", async () => {
   const heroComponent = await source("v4/src/components/Hero.astro");
+  const logoReveal = await source("v4/src/components/HeroLogoReveal.astro");
 
   assert.equal(heroComponent.match(/<h1\b/g)?.length, 1);
   assert.match(heroComponent, /data-hero/);
-  assert.match(heroComponent, /data-hero-visual/);
-  assert.match(heroComponent, /<svg\b/);
-  assert.match(heroComponent, /role="img"/);
-  assert.match(heroComponent, /aria-labelledby=/);
+  assert.doesNotMatch(heroComponent, /<svg\b/);
+  assert.match(logoReveal, /data-logo-reveal-surface/);
+  assert.match(logoReveal, /role="img"/);
+  assert.match(logoReveal, /aria-labelledby=/);
   assert.match(heroComponent, /heroArtifacts\.map/);
   assert.match(heroComponent, /hero\.primaryAction\.label/);
   assert.doesNotMatch(heroComponent, /browser|traffic-light|dashboard chrome/i);
@@ -135,7 +137,7 @@ test("v4 ships a standalone hero preview and responsive component styles", async
   const css = await source("v4/src/styles/global.css");
 
   assert.match(preview, /<SiteHeader\s*\/>/);
-  assert.match(preview, /<Hero\s*\/>/);
+  assert.match(preview, /<Hero\s+showLogoControls=\{true\}\s*\/>/);
   assert.match(preview, /scripts\/site/);
   assert.match(css, /\.site-header\[data-floating="true"\]/);
   assert.match(css, /\.hero__visual/);
@@ -143,4 +145,37 @@ test("v4 ships a standalone hero preview and responsive component styles", async
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
   assert.doesNotMatch(css, /transition:\s*all\b/);
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b/i);
+});
+
+test("v4 hero uses the approved aligned logo pair and preview-only controls", async () => {
+  const component = await source("v4/src/components/HeroLogoReveal.astro");
+  const heroComponent = await source("v4/src/components/Hero.astro");
+  const indexPage = await source("v4/src/pages/index.astro");
+  const previewPage = await source("v4/src/pages/preview/hero.astro");
+  const peach = await readFile(path.join(root, "v4/public/assets/logo/8-1-peach.png"));
+  const violet = await readFile(path.join(root, "v4/public/assets/logo/8-1.png"));
+
+  assert.equal(peach.readUInt32BE(16), 1024);
+  assert.equal(peach.readUInt32BE(20), 1024);
+  assert.equal(violet.readUInt32BE(16), 1024);
+  assert.equal(violet.readUInt32BE(20), 1024);
+  assert.equal(createHash("sha256").update(peach).digest("hex"), "05b2aca8c70212b2cf6625e67b0b6809ad1246741de157f1a145b38ce3d818db");
+  assert.equal(createHash("sha256").update(violet).digest("hex"), "11c6b2f96d1d4b6f40133462c80dfb7926bafd699e78099c510cabc465b05d00");
+
+  assert.match(component, /showControls\s*=\s*false/);
+  assert.match(component, /data-logo-reveal/);
+  assert.match(component, /data-logo-reveal-surface/);
+  assert.match(component, /8-1\.png/);
+  assert.match(component, /8-1-peach\.png/);
+  assert.ok(component.indexOf("8-1.png") < component.indexOf("8-1-peach.png"));
+  assert.match(component, /showControls\s*&&/);
+  assert.match(component, /data-reveal-inspector/);
+
+  assert.match(heroComponent, /import HeroLogoReveal/);
+  assert.match(heroComponent, /showLogoControls\s*=\s*false/);
+  assert.match(heroComponent, /<HeroLogoReveal\s+showControls=\{showLogoControls\}/);
+  assert.doesNotMatch(heroComponent, /<svg\b/);
+  assert.match(indexPage, /<Hero\s*\/>/);
+  assert.doesNotMatch(indexPage, /showLogoControls/);
+  assert.match(previewPage, /<Hero\s+showLogoControls=\{true\}\s*\/>/);
 });
