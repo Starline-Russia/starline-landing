@@ -1,33 +1,19 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import SiteHeader from "../components/SiteHeader.astro";
 ---
 
 <BaseLayout
-  title="Starline v4 — дизайн-фундамент"
-  description="Типографика и цветовая система будущего лендинга Starline v4."
+  title="Starline — система роста e-commerce"
+  description="Starline соединяет стратегию, продукт, performance и аналитику в управляемую систему роста e-commerce."
 >
-  <main id="content" class="foundation site-shell">
-    <div class="foundation__copy">
-      <p class="foundation__status">Starline v4 / Checkpoint 0</p>
-      <h1>Белый. Чёрный. Персиковый.</h1>
-      <p class="foundation__intro">
-        Astro собирает статическую страницу. CSS Variables хранят значения, а Design Tokens задают их роли в системе.
-      </p>
-    </div>
-
-    <dl class="foundation__tokens" aria-label="Основные цветовые роли v4">
-      <div class="foundation__token foundation__token--paper">
-        <dt>Paper</dt>
-        <dd>Основа</dd>
-      </div>
-      <div class="foundation__token foundation__token--ink">
-        <dt>Ink</dt>
-        <dd>Текст</dd>
-      </div>
-      <div class="foundation__token foundation__token--peach">
-        <dt>Peach</dt>
-        <dd>Акцент</dd>
-      </div>
-    </dl>
+  <SiteHeader />
+  <main id="content">
+    <Hero />
   </main>
+
+  <script>
+    import "../scripts/site";
+  </script>
 </BaseLayout>

@@ -1,0 +1,57 @@
+---
+import { hero, heroArtifacts } from "../data/site";
+---
+
+<section class="hero site-shell" data-hero aria-labelledby="hero-title">
+  <div class="hero__layout">
+    <h1 id="hero-title" class="hero__title" data-reveal>{hero.title}</h1>
+
+    <div class="hero__support" data-reveal>
+      <p class="hero__description">{hero.description}</p>
+      <div class="hero__actions" aria-label="Действия">
+        <a class="action action--primary" href={hero.primaryAction.href}>{hero.primaryAction.label}</a>
+        <a class="action action--secondary" href={hero.secondaryAction.href}>{hero.secondaryAction.label}</a>
+      </div>
+    </div>
+
+    <figure
+      class="hero__visual"
+      data-hero-visual
+      data-reveal
+      role="img"
+      aria-labelledby="hero-visual-title hero-visual-description"
+    >
+      <span id="hero-visual-title" class="visually-hidden">Система управляемого роста</span>
+      <span id="hero-visual-description" class="visually-hidden">
+        Кривая объединяет спрос, продукт и экономику и показывает движение к устойчивому росту.
+      </span>
+      <svg class="hero-diagram" viewBox="0 0 560 420" aria-hidden="true">
+        <path class="hero-diagram__axis" d="M48 354H516M48 354V54" />
+        <path class="hero-diagram__guide" d="M48 274H516M48 194H516M48 114H516" />
+        <path
+          class="hero-diagram__field"
+          d="M48 330C132 326 145 277 218 266C303 253 318 222 379 176C427 140 472 115 516 79V354H48Z"
+        />
+        <path
+          class="hero-diagram__curve"
+          d="M48 330C132 326 145 277 218 266C303 253 318 222 379 176C427 140 472 115 516 79"
+        />
+        <circle class="hero-diagram__point" cx="146" cy="290" r="6" />
+        <circle class="hero-diagram__point" cx="300" cy="244" r="6" />
+        <circle class="hero-diagram__point hero-diagram__point--active" cx="447" cy="128" r="8" />
+        <text class="hero-diagram__label" x="48" y="374">СПРОС</text>
+        <text class="hero-diagram__label" x="246" y="374">ПРОДУКТ</text>
+        <text class="hero-diagram__label" x="414" y="374">ЭКОНОМИКА</text>
+      </svg>
+    </figure>
+
+    <dl class="hero__facts" aria-label="Опыт и охват Starline" data-reveal>
+      {heroArtifacts.map((artifact) => (
+        <div class="hero__fact">
+          <dt><span>{artifact.value}</span> {artifact.label}</dt>
+          <dd>{artifact.detail}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>

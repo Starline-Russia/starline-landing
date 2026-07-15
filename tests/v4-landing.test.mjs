@@ -44,7 +44,7 @@ test("v4 locks the approved references and canonical design tokens", async () =>
   assert.match(tokenBridge, /@import\s+["']\.\.\/\.\.\/tokens\.css["']/);
 });
 
-test("v4 foundation exposes accessible metadata and a visible token proof", async () => {
+test("v4 page shell exposes accessible metadata and assembles the hero checkpoint", async () => {
   const layout = await source("v4/src/layouts/BaseLayout.astro");
   const page = await source("v4/src/pages/index.astro");
   const css = await source("v4/src/styles/global.css");
@@ -55,9 +55,11 @@ test("v4 foundation exposes accessible metadata and a visible token proof", asyn
   assert.match(layout, /Source\+Serif\+4/);
   assert.match(layout, /family=Inter/);
   assert.match(page, /id="content"/);
-  assert.match(page, /Paper/);
-  assert.match(page, /Ink/);
-  assert.match(page, /Peach/);
+  assert.match(page, /import SiteHeader from/);
+  assert.match(page, /import Hero from/);
+  assert.match(page, /<SiteHeader\s*\/>/);
+  assert.match(page, /<Hero\s*\/>/);
+  assert.match(page, /scripts\/site/);
   assert.match(css, /^\/\* Hallmark · pre-emit critique:/);
   assert.match(css, /theme: studied-DNA \(source:/);
   assert.match(css, /overflow-x:\s*clip/);
@@ -75,4 +77,70 @@ test("v4 records its Hallmark fingerprint inside the isolated project", async ()
   assert.equal(log[0].theme, "studied-DNA");
   assert.equal(log[0].nav, "N10");
   assert.equal(log[0].footer, "Ft2");
+});
+
+test("v4 keeps navigation and hero copy in a typed site data module", async () => {
+  const siteData = await source("v4/src/data/site.ts");
+
+  assert.match(siteData, /export const navigation/);
+  assert.match(siteData, /export const heroArtifacts/);
+  assert.match(siteData, /10\+/);
+  assert.match(siteData, /50\+/);
+  assert.match(siteData, /19/);
+  assert.match(siteData, /последн/i);
+  assert.doesNotMatch(siteData, /50\+\s+(?:проект|клиент)/i);
+});
+
+test("v4 header uses one accessible DOM tree for mobile menu and scroll morph", async () => {
+  const header = await source("v4/src/components/SiteHeader.astro");
+
+  assert.equal(header.match(/<header\b/g)?.length, 1);
+  assert.match(header, /data-site-header/);
+  assert.match(header, /data-nav-toggle/);
+  assert.match(header, /aria-expanded="false"/);
+  assert.match(header, /aria-controls="site-navigation"/);
+  assert.match(header, /data-site-nav/);
+  assert.match(header, /hero\.primaryAction\.label/);
+  assert.doesNotMatch(header, /<header[\s\S]*<header/);
+});
+
+test("v4 hero is semantic, factual, and uses a native analytical illustration", async () => {
+  const heroComponent = await source("v4/src/components/Hero.astro");
+
+  assert.equal(heroComponent.match(/<h1\b/g)?.length, 1);
+  assert.match(heroComponent, /data-hero/);
+  assert.match(heroComponent, /data-hero-visual/);
+  assert.match(heroComponent, /<svg\b/);
+  assert.match(heroComponent, /role="img"/);
+  assert.match(heroComponent, /aria-labelledby=/);
+  assert.match(heroComponent, /heroArtifacts\.map/);
+  assert.match(heroComponent, /hero\.primaryAction\.label/);
+  assert.doesNotMatch(heroComponent, /browser|traffic-light|dashboard chrome/i);
+});
+
+test("v4 controller limits motion to the menu, N10 morph, and initial assembly", async () => {
+  const controller = await source("v4/src/scripts/site.ts");
+
+  assert.match(controller, /aria-expanded/);
+  assert.match(controller, /Escape/);
+  assert.match(controller, /dataset\.floating/);
+  assert.match(controller, /requestAnimationFrame/);
+  assert.match(controller, /passive:\s*true/);
+  assert.match(controller, /dataset\.ready/);
+  assert.doesNotMatch(controller, /fetch\(|gsap|framer|lottie/i);
+});
+
+test("v4 ships a standalone hero preview and responsive component styles", async () => {
+  const preview = await source("v4/src/pages/preview/hero.astro");
+  const css = await source("v4/src/styles/global.css");
+
+  assert.match(preview, /<SiteHeader\s*\/>/);
+  assert.match(preview, /<Hero\s*\/>/);
+  assert.match(preview, /scripts\/site/);
+  assert.match(css, /\.site-header\[data-floating="true"\]/);
+  assert.match(css, /\.hero__visual/);
+  assert.match(css, /@media\s*\(min-width:\s*60rem\)/);
+  assert.match(css, /prefers-reduced-motion:\s*reduce/);
+  assert.doesNotMatch(css, /transition:\s*all\b/);
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b/i);
 });

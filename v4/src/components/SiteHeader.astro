@@ -1,0 +1,35 @@
+---
+import { brand, hero, navigation } from "../data/site";
+---
+
+<header class="site-header" data-site-header data-floating="false" data-nav-open="false">
+  <div class="site-header__frame">
+    <a class="site-header__brand" href="/" aria-label="Starline — на главную">
+      <span>{brand}</span>
+      <span class="site-header__brand-mark" aria-hidden="true"></span>
+    </a>
+
+    <button
+      class="site-header__toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="site-navigation"
+      data-nav-toggle
+    >
+      <span>Меню</span>
+      <span class="site-header__toggle-mark" aria-hidden="true">
+        <span></span>
+        <span></span>
+      </span>
+    </button>
+
+    <nav id="site-navigation" class="site-header__nav" aria-label="Основная навигация" data-site-nav>
+      <ul class="site-header__links">
+        {navigation.map((item) => (
+          <li><a class="site-header__link" href={item.href}>{item.label}</a></li>
+        ))}
+      </ul>
+      <a class="site-header__action" href={hero.primaryAction.href}>{hero.primaryAction.label}</a>
+    </nav>
+  </div>
+</header>
