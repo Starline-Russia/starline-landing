@@ -155,6 +155,7 @@ button:disabled, input:disabled { opacity: 0.55; cursor: not-allowed; }
 .matrix-axis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 10px 0 0 45px; color: rgba(255, 255, 255, 0.48); font-size: 10px; text-align: center; }
 
 .services { color: var(--white); background: var(--night); }
+.services .section-lead { font-size: 18px; }
 .service-list { margin-top: 70px; border-top: 1px solid var(--line); }
 .service-item { border-bottom: 1px solid var(--line); }
 .service-toggle { display: grid; grid-template-columns: 70px 1fr 58px; align-items: center; width: 100%; min-height: 112px; padding: 0; color: var(--white); border: 0; background: transparent; text-align: left; cursor: pointer; }
@@ -318,6 +319,7 @@ button:disabled, input:disabled { opacity: 0.55; cursor: not-allowed; }
   .matrix-legend { justify-content: flex-start; flex-wrap: wrap; }
   .matrix i, .matrix em { min-height: 38px; }
   .section-heading h2, .economics-heading h2, .lead h2 { font-size: 40px; }
+  .services .section-lead { font-size: 17px; }
   .service-list { margin-top: 50px; }
   .service-toggle { grid-template-columns: 42px 1fr 42px; min-height: 92px; }
   .service-title { font-size: 25px; }

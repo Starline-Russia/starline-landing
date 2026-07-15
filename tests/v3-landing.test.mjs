@@ -153,6 +153,47 @@ test("services has no eyebrow and a standalone component preview", async () => {
   assert.doesNotMatch(preview, /SiteHeader|Hero|Tasks|Cohorts|Industries|SiteFooter/);
 });
 
+test("services use the approved taxonomy, order, descriptions, and channel labels", async () => {
+  const data = await readFile(path.join(v3Root, "src", "data", "site.ts"), "utf8");
+  const serviceData = data.split("export const services")[1].split("export const industries")[0];
+  const titles = [...serviceData.matchAll(/title:\s*"([^"]+)"/g)].map((match) => match[1]);
+  const descriptions = [...serviceData.matchAll(/description:\s*"([^"]+)"/g)].map((match) => match[1]);
+  const toolsets = [...serviceData.matchAll(/tools:\s*\[([^\]]*)\]/g)].map((match) =>
+    [...match[1].matchAll(/"([^"]+)"/g)].map((tool) => tool[1]),
+  );
+
+  assert.deepEqual(titles, [
+    "Performance",
+    "Мобильная реклама",
+    "Media и OLV",
+    "Retail Media",
+    "SEO и GEO",
+    "AI-Assisted аналитика",
+  ]);
+  assert.deepEqual(descriptions, [
+    "Строим привлечение вокруг качества последней когорты, а не только стоимости конверсии.",
+    "Новые пользователи в ваше мобильное приложение",
+    "Brandformance-подход для формирования верха воронки и повышения знания бренда",
+    "Performance-продвижение карточек товара и outclick-реклама",
+    "Растим органическую видимость в поиске и AI-ответах, где уже существует спрос.",
+    "Создаем для каждого проекта интерактивные кастомизированные отчеты и дашборды в реальном времени",
+  ]);
+  assert.deepEqual(toolsets, [
+    ["Яндекс.Директ", "ВК", "CPA"],
+    ["inApp", "DSP", "ASO"],
+    ["Programmatic", "Media", "Спецпроекты"],
+    ["Ozon", "RWB", "X5 Media", "Magnit Ads"],
+    ["SEO", "GEO", "Контент", "Техническая оптимизация"],
+    ["LLM-Отчетность", "Дашборды", "BI", "Яндекс.Метрика"],
+  ]);
+});
+
+test("services lead copy uses an explicit 18px desktop font size", async () => {
+  const css = await readFile(path.join(v3Root, "src", "styles", "global.css"), "utf8");
+
+  assert.match(css, /\.services \.section-lead\s*\{[^}]*font-size:\s*18px/s);
+});
+
 test("cohorts reproduces the static v2 content and matrix", async () => {
   const cohorts = await readFile(
     path.join(v3Root, "src", "components", "Cohorts.astro"),

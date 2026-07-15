@@ -62,24 +62,24 @@ export const tasks: TaskItem[] = [
 
 export const services: ServiceItem[] = [
   {
-    title: "Performance и новые клиенты",
+    title: "Performance",
     description: "Строим привлечение вокруг качества последней когорты, а не только стоимости конверсии.",
-    tools: ["Performance", "Контекст", "Paid social", "Эксперименты"],
+    tools: ["Яндекс.Директ", "ВК", "CPA"],
   },
   {
-    title: "Media, CTV и OLV",
-    description: "Создаём новый спрос и расширяем охват через медийные и видеоканалы.",
-    tools: ["Media", "CTV", "OLV", "Охватные кампании"],
+    title: "Мобильная реклама",
+    description: "Новые пользователи в ваше мобильное приложение",
+    tools: ["inApp", "DSP", "ASO"],
   },
   {
-    title: "Retail Media и marketplaces",
-    description: "Соединяем продвижение внутри ритейлеров с общей экономикой продаж.",
-    tools: ["Retail Media", "Маркетплейсы", "Товарные фиды", "Промо"],
+    title: "Media и OLV",
+    description: "Brandformance-подход для формирования верха воронки и повышения знания бренда",
+    tools: ["Programmatic", "Media", "Спецпроекты"],
   },
   {
-    title: "Mobile и каналы продаж",
-    description: "Масштабируем привлечение и продажи между Web, iOS, Android и Ozon.",
-    tools: ["Mobile ads", "Web", "iOS", "Android", "Ozon"],
+    title: "Retail Media",
+    description: "Performance-продвижение карточек товара и outclick-реклама",
+    tools: ["Ozon", "RWB", "X5 Media", "Magnit Ads"],
   },
   {
     title: "SEO и GEO",
@@ -87,9 +87,9 @@ export const services: ServiceItem[] = [
     tools: ["SEO", "GEO", "Контент", "Техническая оптимизация"],
   },
   {
-    title: "Аналитика и консалтинг",
-    description: "Связываем каналы с когортами, прогнозом GMV и решениями на уровне бизнеса.",
-    tools: ["Когортная модель", "AI-assisted аналитика", "Стратегия", "Прогноз"],
+    title: "AI-Assisted аналитика",
+    description: "Создаем для каждого проекта интерактивные кастомизированные отчеты и дашборды в реальном времени",
+    tools: ["LLM-Отчетность", "Дашборды", "BI", "Яндекс.Метрика"],
   },
 ];
 
