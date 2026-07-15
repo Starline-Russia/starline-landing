@@ -179,3 +179,37 @@ test("v4 hero uses the approved aligned logo pair and preview-only controls", as
   assert.doesNotMatch(indexPage, /showLogoControls/);
   assert.match(previewPage, /<Hero\s+showLogoControls=\{true\}\s*\/>/);
 });
+
+test("v4 logo reveal uses local pointer state, CSS masking, and clamped preview controls", async () => {
+  const controller = await source("v4/src/scripts/hero-logo-reveal.ts");
+  const siteController = await source("v4/src/scripts/site.ts");
+  const css = await source("v4/src/styles/global.css");
+
+  assert.match(controller, /export function initHeroLogoReveals/);
+  assert.match(controller, /pointerenter/);
+  assert.match(controller, /pointermove/);
+  assert.match(controller, /pointerleave/);
+  assert.match(controller, /pointercancel/);
+  assert.match(controller, /requestAnimationFrame/);
+  assert.match(controller, /cancelAnimationFrame/);
+  assert.match(controller, /style\.setProperty/);
+  assert.match(controller, /Math\.min/);
+  assert.match(controller, /Math\.max/);
+  assert.match(controller, /data-reveal-reset/);
+  assert.doesNotMatch(controller, /fetch\(|canvas|webgl|localStorage|gsap|framer|lottie/i);
+  assert.match(siteController, /initHeroLogoReveals/);
+
+  assert.match(css, /\.hero-logo-reveal__layer--peach/);
+  assert.match(css, /mask-image:\s*radial-gradient/);
+  assert.match(css, /-webkit-mask-image:\s*radial-gradient/);
+  assert.match(css, /object-fit:\s*contain/);
+  assert.match(css, /touch-action:\s*pan-y/);
+  assert.match(css, /\.reveal-inspector/);
+  assert.match(css, /position:\s*fixed/);
+  assert.match(
+    css,
+    /html\[data-enhanced\]\[data-ready="true"\]\s+\.hero__visual\s*\{[^}]*transform:\s*none\s*;/,
+  );
+  assert.doesNotMatch(css, /transition:\s*all\b/);
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b/i);
+});

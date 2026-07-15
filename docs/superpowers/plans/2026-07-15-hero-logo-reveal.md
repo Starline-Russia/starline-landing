@@ -554,7 +554,7 @@ In the existing `@media (min-width: 40rem)` block, move the aspect ratio from `.
 }
 ```
 
-In the existing `@media (min-width: 60rem)` block, preserve the current grid placement and width while adding the fixed preview inspector:
+In the existing `@media (min-width: 60rem)` block, preserve the current grid placement and width. Keep the inspector in flow at this breakpoint:
 
 ```css
 .hero__visual {
@@ -568,13 +568,20 @@ In the existing `@media (min-width: 60rem)` block, preserve the current grid pla
   justify-self: stretch;
 }
 
-.reveal-inspector {
-  position: fixed;
-  inset-inline-end: var(--space-lg);
-  inset-block-end: var(--space-lg);
-  z-index: var(--z-sticky);
-  width: min(18rem, calc(100vw - (var(--space-lg) * 2)));
-  margin: 0;
+```
+
+Add a separate wide-desktop breakpoint so the fixed panel uses whitespace above the logo instead of intercepting its pointer area:
+
+```css
+@media (min-width: 80rem) {
+  .reveal-inspector {
+    position: fixed;
+    inset-block-start: calc(var(--header-height) + var(--space-lg));
+    inset-inline-end: var(--space-lg);
+    z-index: var(--z-sticky);
+    width: min(18rem, calc(100vw - (var(--space-lg) * 2)));
+    margin: 0;
+  }
 }
 ```
 

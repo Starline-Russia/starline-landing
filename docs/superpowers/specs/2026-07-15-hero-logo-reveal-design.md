@@ -82,7 +82,7 @@ The inspector contains three labeled native range inputs:
 
 Each row displays its current numeric value. A `Сбросить` button restores the documented defaults.
 
-On desktop, the inspector is a narrow fixed panel at the lower-right edge of the preview viewport so it does not change the hero visual's size or grid. At small widths, it becomes an in-flow panel after the visual so it cannot cover the hero content. It uses the existing paper, ink, rule, spacing, typography, focus, and button tokens; it does not introduce a new card language or violet UI chrome.
+At wide desktop widths, the inspector is a narrow fixed panel at the upper-right edge below the header, inside the whitespace above the logo. Below 1280 px it remains an in-flow panel after the visual, so it cannot cover the logo or hero content. This never changes the hero visual's size or grid. The inspector uses the existing paper, ink, rule, spacing, typography, focus, and button tokens; it does not introduce a new card language or violet UI chrome.
 
 ## Interaction States
 

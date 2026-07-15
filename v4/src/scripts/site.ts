@@ -1,5 +1,8 @@
+import { initHeroLogoReveals } from "./hero-logo-reveal";
+
 const root = document.documentElement;
 root.dataset.enhanced = "true";
+initHeroLogoReveals();
 
 const header = document.querySelector<HTMLElement>("[data-site-header]");
 const toggle = header?.querySelector<HTMLButtonElement>("[data-nav-toggle]");
