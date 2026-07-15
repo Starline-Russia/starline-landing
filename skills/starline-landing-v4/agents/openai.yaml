@@ -1,0 +1,4 @@
+interface:
+  display_name: "Starline Landing v4"
+  short_description: "Build and refine the isolated Astro Starline v4"
+  default_prompt: "Use $starline-landing-v4 to continue one Starline v4 landing component without changing v3."

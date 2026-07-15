@@ -12,8 +12,8 @@ async function source(relativePath) {
 }
 
 test("v4 is an isolated static Astro project", async () => {
-  const packageJson = JSON.parse(await source("v4/package.json"));
-  const config = await source("v4/astro.config.mjs");
+  const packageJson = JSON.parse(await source("package.json"));
+  const config = await source("astro.config.mjs");
 
   assert.equal(packageJson.dependencies.astro, "7.0.9");
   assert.equal(packageJson.devDependencies.typescript, "6.0.3");
@@ -27,9 +27,9 @@ test("v4 is an isolated static Astro project", async () => {
 });
 
 test("v4 locks the approved references and canonical design tokens", async () => {
-  const design = await source("v4/DESIGN.md");
-  const tokens = await source("v4/tokens.css");
-  const tokenBridge = await source("v4/src/styles/tokens.css");
+  const design = await source("DESIGN.md");
+  const tokens = await source("tokens.css");
+  const tokenBridge = await source("src/styles/tokens.css");
 
   assert.match(design, /steep\.app/);
   assert.match(design, /75fdb89f-ca64-41b3-af36-7a78bd09448e/);
@@ -46,9 +46,9 @@ test("v4 locks the approved references and canonical design tokens", async () =>
 });
 
 test("v4 page shell exposes accessible metadata and assembles the hero checkpoint", async () => {
-  const layout = await source("v4/src/layouts/BaseLayout.astro");
-  const page = await source("v4/src/pages/index.astro");
-  const css = await source("v4/src/styles/global.css");
+  const layout = await source("src/layouts/BaseLayout.astro");
+  const page = await source("src/pages/index.astro");
+  const css = await source("src/styles/global.css");
 
   assert.match(layout, /lang="ru"/);
   assert.match(layout, /viewport-fit=cover/);
@@ -72,7 +72,7 @@ test("v4 page shell exposes accessible metadata and assembles the hero checkpoin
 });
 
 test("v4 records its Hallmark fingerprint inside the isolated project", async () => {
-  const log = JSON.parse(await source("v4/.hallmark/log.json"));
+  const log = JSON.parse(await source(".hallmark/log.json"));
 
   assert.equal(log[0].macrostructure, "Feature Stack");
   assert.equal(log[0].theme, "studied-DNA");
@@ -82,7 +82,7 @@ test("v4 records its Hallmark fingerprint inside the isolated project", async ()
 });
 
 test("v4 keeps navigation and hero copy in a typed site data module", async () => {
-  const siteData = await source("v4/src/data/site.ts");
+  const siteData = await source("src/data/site.ts");
 
   assert.match(siteData, /export const navigation/);
   assert.match(siteData, /export const heroArtifacts/);
@@ -94,7 +94,7 @@ test("v4 keeps navigation and hero copy in a typed site data module", async () =
 });
 
 test("v4 header uses one accessible DOM tree for mobile menu and scroll morph", async () => {
-  const header = await source("v4/src/components/SiteHeader.astro");
+  const header = await source("src/components/SiteHeader.astro");
 
   assert.equal(header.match(/<header\b/g)?.length, 1);
   assert.match(header, /data-site-header/);
@@ -107,8 +107,8 @@ test("v4 header uses one accessible DOM tree for mobile menu and scroll morph", 
 });
 
 test("v4 hero is semantic, factual, and uses the approved logo reveal", async () => {
-  const heroComponent = await source("v4/src/components/Hero.astro");
-  const logoReveal = await source("v4/src/components/HeroLogoReveal.astro");
+  const heroComponent = await source("src/components/Hero.astro");
+  const logoReveal = await source("src/components/HeroLogoReveal.astro");
 
   assert.equal(heroComponent.match(/<h1\b/g)?.length, 1);
   assert.match(heroComponent, /data-hero/);
@@ -122,7 +122,7 @@ test("v4 hero is semantic, factual, and uses the approved logo reveal", async ()
 });
 
 test("v4 controller limits motion to the menu, N10 morph, and initial assembly", async () => {
-  const controller = await source("v4/src/scripts/site.ts");
+  const controller = await source("src/scripts/site.ts");
 
   assert.match(controller, /aria-expanded/);
   assert.match(controller, /Escape/);
@@ -134,8 +134,8 @@ test("v4 controller limits motion to the menu, N10 morph, and initial assembly",
 });
 
 test("v4 ships a standalone hero preview and responsive component styles", async () => {
-  const preview = await source("v4/src/pages/preview/hero.astro");
-  const css = await source("v4/src/styles/global.css");
+  const preview = await source("src/pages/preview/hero.astro");
+  const css = await source("src/styles/global.css");
 
   assert.match(preview, /<SiteHeader\s*\/>/);
   assert.match(preview, /<Hero\s+showLogoControls=\{true\}\s*\/>/);
@@ -149,12 +149,12 @@ test("v4 ships a standalone hero preview and responsive component styles", async
 });
 
 test("v4 hero uses the approved aligned logo pair and preview-only controls", async () => {
-  const component = await source("v4/src/components/HeroLogoReveal.astro");
-  const heroComponent = await source("v4/src/components/Hero.astro");
-  const indexPage = await source("v4/src/pages/index.astro");
-  const previewPage = await source("v4/src/pages/preview/hero.astro");
-  const peach = await readFile(path.join(root, "v4/public/assets/logo/8-1-peach.png"));
-  const violet = await readFile(path.join(root, "v4/public/assets/logo/8-1.png"));
+  const component = await source("src/components/HeroLogoReveal.astro");
+  const heroComponent = await source("src/components/Hero.astro");
+  const indexPage = await source("src/pages/index.astro");
+  const previewPage = await source("src/pages/preview/hero.astro");
+  const peach = await readFile(path.join(root, "public/assets/logo/8-1-peach.png"));
+  const violet = await readFile(path.join(root, "public/assets/logo/8-1.png"));
 
   assert.equal(peach.readUInt32BE(16), 1024);
   assert.equal(peach.readUInt32BE(20), 1024);
@@ -182,9 +182,9 @@ test("v4 hero uses the approved aligned logo pair and preview-only controls", as
 });
 
 test("v4 logo reveal uses local pointer state, CSS masking, and clamped preview controls", async () => {
-  const controller = await source("v4/src/scripts/hero-logo-reveal.ts");
-  const siteController = await source("v4/src/scripts/site.ts");
-  const css = await source("v4/src/styles/global.css");
+  const controller = await source("src/scripts/hero-logo-reveal.ts");
+  const siteController = await source("src/scripts/site.ts");
+  const css = await source("src/styles/global.css");
 
   assert.match(controller, /export function initHeroLogoReveals/);
   assert.match(controller, /pointerenter/);

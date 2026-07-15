@@ -1,0 +1,19 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+---
+
+<BaseLayout
+  title="Starline — система роста e-commerce"
+  description="Starline соединяет стратегию, продукт, performance и аналитику в управляемую систему роста e-commerce."
+>
+  <SiteHeader />
+  <main id="content">
+    <Hero />
+  </main>
+
+  <script>
+    import "../scripts/site";
+  </script>
+</BaseLayout>

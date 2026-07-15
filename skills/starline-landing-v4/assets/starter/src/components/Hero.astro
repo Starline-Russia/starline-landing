@@ -1,0 +1,35 @@
+---
+import HeroLogoReveal from "./HeroLogoReveal.astro";
+import { hero, heroArtifacts } from "../data/site";
+
+interface Props {
+  showLogoControls?: boolean;
+}
+
+const { showLogoControls = false } = Astro.props;
+---
+
+<section class="hero site-shell" data-hero aria-labelledby="hero-title">
+  <div class="hero__layout">
+    <h1 id="hero-title" class="hero__title" data-reveal>{hero.title}</h1>
+
+    <div class="hero__support" data-reveal>
+      <p class="hero__description">{hero.description}</p>
+      <div class="hero__actions" aria-label="Действия">
+        <a class="action action--primary" href={hero.primaryAction.href}>{hero.primaryAction.label}</a>
+        <a class="action action--secondary" href={hero.secondaryAction.href}>{hero.secondaryAction.label}</a>
+      </div>
+    </div>
+
+    <HeroLogoReveal showControls={showLogoControls} />
+
+    <dl class="hero__facts" aria-label="Опыт и охват Starline" data-reveal>
+      {heroArtifacts.map((artifact) => (
+        <div class="hero__fact">
+          <dt><span>{artifact.value}</span> {artifact.label}</dt>
+          <dd>{artifact.detail}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>

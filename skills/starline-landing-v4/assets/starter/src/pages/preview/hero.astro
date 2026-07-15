@@ -1,0 +1,22 @@
+---
+import Hero from "../../components/Hero.astro";
+import SiteHeader from "../../components/SiteHeader.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Starline v4 — preview навигации и hero"
+  description="Изолированный preview первого компонента Starline v4."
+>
+  <SiteHeader />
+  <main id="content">
+    <Hero showLogoControls={true} />
+    <section class="checkpoint-note site-shell" aria-label="Проверка анимации навигации">
+      <p>Прокрутите ниже, чтобы проверить переход навигации в плавающий режим.</p>
+    </section>
+  </main>
+
+  <script>
+    import "../../scripts/site";
+  </script>
+</BaseLayout>
