@@ -40,6 +40,7 @@ test("v3 is an isolated Astro 7 project", async () => {
   assert.match(packageJson.scripts.check, /astro check/);
   assert.match(packageJson.scripts.build, /astro build/);
   assert.match(packageJson.scripts.test, /node --test/);
+  assert.equal(packageJson.scripts["test:build"], "node --test ../tests/v3-build.test.mjs");
   assert.match(astroConfig, /output:\s*["']static["']/);
 });
 
@@ -133,6 +134,23 @@ test("tasks has a standalone component preview", async () => {
   assert.match(preview, /import Tasks from \"\.\.\/\.\.\/components\/Tasks\.astro\"/);
   assert.match(preview, /<Tasks\s*\/>/);
   assert.doesNotMatch(preview, /SiteHeader|Hero|Services|SiteFooter/);
+});
+
+test("services has no eyebrow and a standalone component preview", async () => {
+  const services = await readFile(
+    path.join(v3Root, "src", "components", "Services.astro"),
+    "utf8",
+  );
+  const previewPath = path.join(v3Root, "src", "pages", "preview", "services.astro");
+  const pageFiles = await collectFiles(path.join(v3Root, "src", "pages"), ".astro");
+
+  assert.doesNotMatch(services, /class="eyebrow"/);
+  assert.ok(pageFiles.includes(previewPath), "standalone Services preview should exist");
+
+  const preview = await readFile(previewPath, "utf8");
+  assert.match(preview, /import Services from "\.\.\/\.\.\/components\/Services\.astro"/);
+  assert.match(preview, /<Services\s*\/>/);
+  assert.doesNotMatch(preview, /SiteHeader|Hero|Tasks|Cohorts|Industries|SiteFooter/);
 });
 
 test("cohorts reproduces the static v2 content and matrix", async () => {
