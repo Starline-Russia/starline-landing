@@ -1,0 +1,35 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Cases from "../components/Cases.astro";
+import Cohorts from "../components/Cohorts.astro";
+import Economics from "../components/Economics.astro";
+import Hero from "../components/Hero.astro";
+import Industries from "../components/Industries.astro";
+import Lead from "../components/Lead.astro";
+import Palitra from "../components/Palitra.astro";
+import Process from "../components/Process.astro";
+import Services from "../components/Services.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import Tasks from "../components/Tasks.astro";
+---
+
+<BaseLayout
+  title="Starline — оператор роста для электронной коммерции"
+  description="Управляем привлечением новых клиентов, аналитикой и каналами продаж для роста GMV электронной коммерции."
+>
+  <SiteHeader />
+  <main>
+    <section id="hero" class="scene hero"><Hero /></section>
+    <section id="tasks" class="scene tasks"><Tasks /></section>
+    <section id="cohorts" class="scene cohorts"><Cohorts /></section>
+    <section id="services" class="scene services"><Services /></section>
+    <section id="industries" class="industries"><Industries /></section>
+    <section id="economics" class="scene economics"><Economics /></section>
+    <section id="process" class="scene process"><Process /></section>
+    <section id="palitra" class="scene palitra"><Palitra /></section>
+    <section id="cases" class="scene cases"><Cases /></section>
+    <section id="lead" class="scene lead"><Lead /></section>
+  </main>
+  <SiteFooter />
+</BaseLayout>

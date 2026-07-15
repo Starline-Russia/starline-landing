@@ -1,0 +1,11 @@
+---
+import { industries } from "../data/site";
+---
+
+<div class="industry-rail shell" aria-label="Индустрии">
+  {industries.map((industry, index) => (
+    <span class="industry-name" data-primary={index === 0 ? "true" : "false"}>
+      {industry}
+    </span>
+  ))}
+</div>
