@@ -34,7 +34,7 @@ The new component owns the visual markup only:
 - optional inspector markup controlled by a `showControls` prop that defaults to `false`;
 - data attributes used by the controller and tests.
 
-The images occupy the same positioning context and use identical sizing rules, guaranteeing pixel-for-pixel alignment. The existing `.hero__visual` width, breakpoint sizing, grid placement, and outer aspect ratio remain unchanged. At 4:3 breakpoints, the square source images use `object-fit: contain` rather than distortion or destructive cropping.
+The images occupy the same positioning context and use identical sizing rules, guaranteeing pixel-for-pixel alignment. The rendered image surface keeps the existing width, breakpoint sizing, grid placement, and aspect ratio. Its grid wrapper may span the available column so the mobile preview inspector can use a readable full width without resizing the logo. At 4:3 breakpoints, the square source images use `object-fit: contain` rather than distortion or destructive cropping.
 
 `Hero.astro` continues to own the surrounding hero copy, actions, and facts. It renders `HeroLogoReveal` in place of the current SVG.
 
