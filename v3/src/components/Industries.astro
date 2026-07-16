@@ -2,10 +2,22 @@
 import { industries } from "../data/site";
 ---
 
-<div class="industry-rail shell" aria-label="Индустрии">
-  {industries.map((industry, index) => (
-    <span class="industry-name" data-primary={index === 0 ? "true" : "false"}>
-      {industry}
-    </span>
-  ))}
+<div class="industries-inner shell">
+  <div class="industries-heading">
+    <div>
+      <p class="eyebrow">Digital-рынок</p>
+      <h2>Индустрии, в которых<br /><span>имеем наибольшую экспертизу</span></h2>
+    </div>
+    <p>
+      Опыт команды позволяет максимально эффективно управлять привлечением клиентов на всех этапах воронки и непосредственно влиять на GMV
+    </p>
+  </div>
+
+  <div class="industry-grid" aria-label="Индустрии">
+    {industries.map((industry) => (
+      <article class="industry-card">
+        <h3>{industry}</h3>
+      </article>
+    ))}
+  </div>
 </div>

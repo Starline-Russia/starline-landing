@@ -94,13 +94,14 @@ export const services: ServiceItem[] = [
 ];
 
 export const industries = [
-  "E-commerce",
-  "Fintech",
+  "Банки и финтех",
   "Travel",
-  "Real estate",
+  "Недвижимость",
   "Fashion",
-  "Online services",
+  "Онлайн-сервисы",
   "Food delivery",
+  "E-commerce",
+  "Beauty",
 ];
 
 export const processSteps = [

@@ -19,9 +19,10 @@ test("v3 production HTML preserves the landing contract", async () => {
   assert.deepEqual(sectionIds, [
     "hero",
     "tasks",
-    "cohorts",
     "services",
     "industries",
+    "market-problem",
+    "cohorts",
     "economics",
     "process",
     "palitra",
@@ -31,10 +32,12 @@ test("v3 production HTML preserves the landing contract", async () => {
   assert.equal(count(html, /class="[^"]*\bhero-cta\b/g), 1);
   assert.equal(count(html, /class="[^"]*\btask-card\b/g), 6);
   assert.equal(count(html, /class="[^"]*\bservice-item\b/g), 6);
-  assert.equal(count(html, /class="[^"]*\bindustry-name\b/g), 7);
+  assert.equal(count(html, /class="[^"]*\bindustry-card\b/g), 8);
+  assert.equal(count(html, /class="market-signal"/g), 2);
   assert.equal(count(html, /class="[^"]*\bcase-study\b/g), 2);
   assert.equal(count(html, /<input\b/g), 2);
   assert.doesNotMatch(html, /Как растет GMV|Как растёт GMV/);
+  assert.match(html, /Реклама может выглядеть эффективной, пока бизнес почти не растёт/);
   assert.match(html, /не является гарантией результата/);
 });
 

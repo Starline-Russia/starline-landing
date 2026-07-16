@@ -49,9 +49,10 @@ test("v3 contains the approved section order and hero contract", async () => {
   const sectionIds = [
     "hero",
     "tasks",
-    "cohorts",
     "services",
     "industries",
+    "market-problem",
+    "cohorts",
     "economics",
     "process",
     "palitra",
@@ -102,7 +103,7 @@ test("hero has isolated responsive styling and a standalone preview", async () =
   assert.doesNotMatch(preview, /SiteHeader|Tasks|SiteFooter/);
 });
 
-test("v3 renders six tasks, six services, and seven industries", async () => {
+test("v3 renders six tasks, six services, and eight industries", async () => {
   const markup = await sourceBundle(".astro");
   const tasksMarkup = await readFile(
     path.join(v3Root, "src", "components", "Tasks.astro"),
@@ -118,7 +119,7 @@ test("v3 renders six tasks, six services, and seven industries", async () => {
   assert.match(markup, /industries\.map/);
   assert.equal((taskData.match(/icon:\s*\"(?:cart|cost|gmv|channels|retargeting|scale)\"/g) ?? []).length, 6);
   assert.equal((serviceData.match(/tools:\s*\[/g) ?? []).length, 6);
-  assert.equal((industryData.match(/^  \"(?:E-commerce|Fintech|Travel|Real estate|Fashion|Online services|Food delivery)\",$/gm) ?? []).length, 7);
+  assert.equal((industryData.match(/^  \"(?:Банки и финтех|Travel|Недвижимость|Fashion|Онлайн-сервисы|Food delivery|E-commerce|Beauty)\",$/gm) ?? []).length, 8);
   assert.match(tasksMarkup, /Реклама работает<br \/><span>Рост бизнеса буксует/);
   assert.doesNotMatch(tasksMarkup, /Задачи e-commerce|class=\"eyebrow/);
   assert.match(markup, /Все инструменты роста —[\s\S]*в одной системе/);
@@ -151,6 +152,84 @@ test("services has no eyebrow and a standalone component preview", async () => {
   assert.match(preview, /import Services from "\.\.\/\.\.\/components\/Services\.astro"/);
   assert.match(preview, /<Services\s*\/>/);
   assert.doesNotMatch(preview, /SiteHeader|Hero|Tasks|Cohorts|Industries|SiteFooter/);
+});
+
+test("industries has an editorial grid and a standalone component preview", async () => {
+  const industries = await readFile(
+    path.join(v3Root, "src", "components", "Industries.astro"),
+    "utf8",
+  );
+  const data = await readFile(path.join(v3Root, "src", "data", "site.ts"), "utf8");
+  const css = await readFile(path.join(v3Root, "src", "styles", "global.css"), "utf8");
+  const script = await readFile(path.join(v3Root, "src", "scripts", "site.ts"), "utf8");
+  const previewPath = path.join(v3Root, "src", "pages", "preview", "industries.astro");
+  const pageFiles = await collectFiles(path.join(v3Root, "src", "pages"), ".astro");
+  const industryData = data.split("export const industries")[1].split("export const processSteps")[0];
+  const industryNames = [...industryData.matchAll(/^  "([^"]+)",$/gm)].map((match) => match[1]);
+
+  assert.deepEqual(industryNames, [
+    "Банки и финтех",
+    "Travel",
+    "Недвижимость",
+    "Fashion",
+    "Онлайн-сервисы",
+    "Food delivery",
+    "E-commerce",
+    "Beauty",
+  ]);
+  assert.ok(industries.includes('<p class="eyebrow">Digital-рынок</p>'));
+  assert.match(industries, /Индустрии, в которых/);
+  assert.match(industries, /имеем наибольшую экспертизу/);
+  assert.match(industries, /Опыт команды позволяет максимально эффективно управлять привлечением клиентов на всех этапах воронки и непосредственно влиять на GMV/);
+  assert.match(industries, /class="industry-grid"/);
+  assert.doesNotMatch(industries, /data-industry-grid/);
+  assert.match(industries, /class="industry-card"/);
+  assert.doesNotMatch(industries, /data-primary/);
+  assert.doesNotMatch(industries, /marquee|animation|scroll/i);
+  assert.match(css, /\.industries-heading > p\s*\{[^}]*font-size:\s*22px/s);
+  assert.match(css, /\.industry-grid\s*\{[^}]*border-top:/s);
+  assert.match(css, /\.industry-card:hover h3\s*\{[^}]*color:\s*var\(--violet\)[^}]*transform:\s*scale\(1\.035\)/s);
+  assert.doesNotMatch(css, /\.industry-grid::after|radial-gradient\(circle 20px at var\(--pointer-x\)/);
+  assert.doesNotMatch(css, /\.industry-card\s*\{[^}]*border-radius/s);
+  assert.doesNotMatch(script, /\[data-industry-grid\]|pointermove|--pointer-x/);
+  assert.ok(pageFiles.includes(previewPath), "standalone Industries preview should exist");
+
+  const preview = await readFile(previewPath, "utf8");
+  assert.match(preview, /import Industries from "\.\.\/\.\.\/components\/Industries\.astro"/);
+  assert.match(preview, /<Industries\s*\/>/);
+  assert.doesNotMatch(preview, /SiteHeader|Hero|Tasks|Services|Economics|SiteFooter/);
+});
+
+test("market problem is a standalone light editorial section", async () => {
+  const component = await readFile(
+    path.join(v3Root, "src", "components", "MarketProblem.astro"),
+    "utf8",
+  );
+  const previewPath = path.join(v3Root, "src", "pages", "preview", "market-problem.astro");
+  const preview = await readFile(previewPath, "utf8");
+  const css = await readFile(path.join(v3Root, "src", "styles", "global.css"), "utf8");
+
+  assert.match(component, /Проблема рынка/);
+  assert.match(component, /Реклама может выглядеть эффективной, пока бизнес почти не растёт/);
+  assert.doesNotMatch(component, /market-index|aria-hidden/);
+  assert.match(component, /class="market-signal"/);
+  assert.match(component, /<h3>CPA оптимизирован<\/h3>/);
+  assert.match(component, /Но рост бизнеса не появляется <strong>автоматически<\/strong>\./);
+  assert.match(component, /<h3>Атрибуция улучшилась<\/h3>/);
+  assert.match(component, /Но GMV может почти <strong>не измениться<\/strong>\./);
+  assert.doesNotMatch(component, /<button|data-|marquee|animation/i);
+  assert.match(preview, /import MarketProblem from "\.\.\/\.\.\/components\/MarketProblem\.astro"/);
+  assert.match(preview, /<MarketProblem\s*\/>/);
+  assert.doesNotMatch(preview, /SiteHeader|Industries|Cohorts|SiteFooter/);
+  assert.match(css, /\.market-problem\s*\{[^}]*padding-block:\s*clamp\(96px,\s*8vw,\s*128px\)[^}]*background:\s*var\(--paper\)/s);
+  assert.match(css, /\.market-problem-inner\s*\{[^}]*min-height:\s*0/s);
+  assert.match(css, /\.section-heading h2, .economics-heading h2, .market-problem-copy h2, .lead h2\s*\{[^}]*font-size:\s*clamp\(42px,\s*5\.1vw,\s*78px\)/s);
+  assert.match(css, /\.market-signal-list\s*\{[^}]*border-top:/s);
+  assert.match(css, /\.market-signal-list\s*\{[^}]*align-self:\s*end/s);
+  assert.match(css, /\.market-signal h3\s*\{[^}]*font-size:\s*clamp\(30px,\s*2\.7vw,\s*42px\)/s);
+  assert.match(css, /\.market-signal strong\s*\{[^}]*font-family:\s*var\(--display\)[^}]*font-weight:\s*600/s);
+  assert.doesNotMatch(css, /\.market-signal strong\s*\{[^}]*color:/s);
+  assert.doesNotMatch(css, /\.market-index/);
 });
 
 test("services use the approved taxonomy, order, descriptions, and channel labels", async () => {
