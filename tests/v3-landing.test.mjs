@@ -273,21 +273,40 @@ test("services lead copy uses an explicit 18px desktop font size", async () => {
   assert.match(css, /\.services \.section-lead\s*\{[^}]*font-size:\s*18px/s);
 });
 
-test("cohorts reproduces the static v2 content and matrix", async () => {
+test("cohorts explains the latest cohort with an interactive matrix", async () => {
   const cohorts = await readFile(
     path.join(v3Root, "src", "components", "Cohorts.astro"),
     "utf8",
   );
+  const css = await readFile(path.join(v3Root, "src", "styles", "global.css"), "utf8");
 
   assert.match(cohorts, /Когортный подход/);
   assert.match(cohorts, /Маркетинг должен растить последнюю когорту/);
   assert.match(cohorts, /Когортный бизнес принимает маркетинговые, продуктовые и коммерческие решения/);
-  assert.match(cohorts, /Задача маркетинга — рост последней когорты\./);
-  assert.match(cohorts, /Бизнес растёт, когда новая выручка выше оттока старых когорт\./);
+  assert.match(cohorts, /Бизнес растёт, когда новая выручка выше оттока старых когорт(?!\.)/);
+  assert.match(cohorts, /Задача маркетинга — <strong>рост последней когорты<\/strong>(?!\.)/);
+  assert.ok(
+    cohorts.indexOf("Бизнес растёт, когда новая выручка выше оттока старых когорт") <
+      cohorts.indexOf("Задача маркетинга — <strong>рост последней когорты</strong>"),
+    "the growth action should follow the business explanation",
+  );
+  assert.doesNotMatch(cohorts, /<span>0[12]<\/span>/);
   assert.equal((cohorts.match(/<b>К[1-5]<\/b>/g) ?? []).length, 5);
   assert.match(cohorts, /Накопленные когорты/);
   assert.match(cohorts, /Последняя когорта/);
+  assert.match(cohorts, /class="cohort-cell-pointer"/);
+  assert.match(cohorts, /class="cohort-cell-pointer-curve"/);
   assert.doesNotMatch(cohorts, /data-cohort-step|data-cohort-visual|cohort-sticky|gmv-line/);
+  assert.match(css, /\.cohort-section-top > p\s*\{[^}]*align-self:\s*center[^}]*margin:\s*36px 0 0/s);
+  assert.match(css, /\.cohort-layout\s*\{[^}]*margin-top:\s*48px/s);
+  assert.match(css, /\.cohort-points\s*\{[^}]*margin-bottom:\s*42px/s);
+  assert.match(css, /\.cohort-layout\s*\{[^}]*position:\s*relative/s);
+  assert.match(css, /\.cohort-cell-pointer\s*\{[^}]*width:\s*calc\(47\.5% - 60px\)[^}]*height:\s*64px[^}]*pointer-events:\s*none/s);
+  assert.match(css, /\.cohort-cell-pointer-curve\s*\{[^}]*stroke-linecap:\s*round/s);
+  assert.match(css, /@media \(max-width: 900px\)\s*\{[\s\S]*?\.cohort-cell-pointer\s*\{[^}]*display:\s*none/s);
+  assert.match(css, /\.matrix i, \.matrix em\s*\{[^}]*transition:\s*[^;]*transform/s);
+  assert.match(css, /\.matrix i:hover\s*\{[^}]*transform:\s*scale\(1\.06\)/s);
+  assert.match(css, /\.matrix i\.new:hover\s*\{[^}]*box-shadow:/s);
 });
 
 test("cohorts has a standalone component preview", async () => {

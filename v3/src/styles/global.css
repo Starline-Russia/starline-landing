@@ -137,22 +137,27 @@ button:disabled, input:disabled { opacity: 0.55; cursor: not-allowed; }
 .palitra::before { position: absolute; inset: 0; content: ""; background: radial-gradient(circle at 72% 34%, rgba(197, 125, 251, 0.18), transparent 34%); pointer-events: none; }
 .cohort-section-top { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr); gap: 70px; }
 .cohort-section-top h2 { max-width: 960px; margin-bottom: 0; font-size: clamp(42px, 5.1vw, 82px); font-weight: 600; line-height: 1.05; }
-.cohort-section-top > p { max-width: 650px; margin: 5px 0 0; color: rgba(255, 255, 255, 0.72); font-size: 19px; }
-.cohort-layout { display: grid; grid-template-columns: 0.75fr 1.25fr; gap: 70px; align-items: end; margin-top: 80px; }
-.cohort-points { border-top: 1px solid var(--line); }
-.cohort-points p { display: grid; grid-template-columns: 52px 1fr; margin: 0; padding: 28px 0; border-bottom: 1px solid var(--line); font-family: var(--display); font-size: 20px; }
-.cohort-points span { color: rgba(255, 255, 255, 0.42); font-size: 13px; font-weight: 600; }
-.matrix-wrap { padding: 34px; border: 1px solid var(--line); border-radius: 8px; background: rgba(255, 255, 255, 0.05); }
+.cohort-section-top > p { align-self: center; max-width: 650px; margin: 36px 0 0; color: rgba(255, 255, 255, 0.72); font-size: 19px; }
+.cohort-layout { position: relative; display: grid; grid-template-columns: 0.75fr 1.25fr; gap: 70px; align-items: end; margin-top: 48px; }
+.cohort-points { margin-bottom: 42px; border-top: 1px solid var(--line); }
+.cohort-points p { margin: 0; padding: 31px 0; border-bottom: 1px solid var(--line); font-family: var(--display); font-size: 20px; }
+.cohort-points strong { color: var(--white); font-weight: 600; }
+.matrix-wrap { position: relative; padding: 34px; border: 1px solid var(--line); border-radius: 8px; background: rgba(255, 255, 255, 0.05); }
 .matrix-legend { display: flex; justify-content: flex-end; gap: 24px; margin-bottom: 25px; color: rgba(255, 255, 255, 0.7); font-size: 11px; }
 .matrix-legend span { display: flex; align-items: center; gap: 7px; }
 .matrix-legend i { width: 12px; height: 12px; background: rgba(197, 125, 251, 0.5); }
 .matrix-legend i.new { background: var(--white); }
 .matrix { display: grid; grid-template-columns: 35px repeat(5, 1fr); gap: 10px; }
-.matrix i, .matrix em { min-height: 62px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 4px; background: rgba(197, 125, 251, 0.36); }
+.matrix i, .matrix em { min-height: 62px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 4px; background: rgba(197, 125, 251, 0.36); transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, box-shadow 160ms ease; }
 .matrix em { border-color: transparent; background: transparent; }
 .matrix i.new { background: var(--white); box-shadow: 0 0 34px rgba(255, 255, 255, 0.3); }
+.matrix i:hover { position: relative; z-index: 1; border-color: rgba(255, 255, 255, 0.62); background: rgba(216, 167, 255, 0.7); transform: scale(1.06); }
+.matrix i.new:hover { box-shadow: 0 0 42px rgba(255, 255, 255, 0.62); }
 .matrix b { align-self: center; color: rgba(255, 255, 255, 0.55); font: 500 11px var(--body); }
 .matrix-axis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 10px 0 0 45px; color: rgba(255, 255, 255, 0.48); font-size: 10px; text-align: center; }
+.cohort-cell-pointer { position: absolute; z-index: 2; left: calc(37.5% + 44px); bottom: 66px; width: calc(47.5% - 60px); height: 64px; color: rgba(255, 255, 255, 0.68); pointer-events: none; }
+.cohort-cell-pointer-curve { fill: none; stroke: currentColor; stroke-linecap: round; stroke-width: 1.5; }
+.cohort-cell-pointer-head { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5; }
 
 .services { color: var(--white); background: var(--night); }
 .services .section-lead { font-size: 18px; }
@@ -295,7 +300,9 @@ button:disabled, input:disabled { opacity: 0.55; cursor: not-allowed; }
   .section-heading.split .section-lead { margin-top: 0; }
   .cohort-section-top, .cohort-layout { grid-template-columns: 1fr; }
   .cohort-section-top { gap: 28px; }
-  .cohort-section-top > p { margin-top: 0; }
+  .cohort-section-top > p { align-self: auto; margin-top: 0; }
+  .cohort-points { margin-bottom: 0; }
+  .cohort-cell-pointer { display: none; }
   .industries-heading { grid-template-columns: 1fr; gap: 28px; }
   .industries-heading > p { margin-bottom: 0; }
   .industry-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 54px; }
