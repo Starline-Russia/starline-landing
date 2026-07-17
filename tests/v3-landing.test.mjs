@@ -464,6 +464,10 @@ test("palitra screen cascade has six approved static screens and an isolated pre
     const source = await readFile(path.join(v3Root, "src", "assets", "palitra", sourceName));
     assert.ok(source.byteLength > 0, `${sourceName} should exist`);
   }
+  const cascadeAssetImports = [...component.matchAll(/import\s+\w+\s+from\s+"\.\.\/assets\/palitra\/([^"]+)";/g)].map((match) => match[1]);
+  assert.deepEqual([...cascadeAssetImports].sort(), [...sourceNames].sort());
+  assert.equal(new Set(cascadeAssetImports).size, 6);
+  assert.doesNotMatch(component, /common\.png/);
   assert.match(component, /data-palitra-cascade/);
   assert.match(component, /data-palitra-cascade-stage/);
   assert.match(component, /data-palitra-cascade-copy/);
@@ -496,6 +500,9 @@ test("palitra screen cascade has six approved static screens and an isolated pre
   assert.match(script, /const finalX = horizontalDirection \* Math\.min\(copyHalfWidth \+ screenHalfWidth \+ cascadeEdgeGap, canvasHalfWidth - screenHalfWidth\);/);
   assert.match(script, /const finalY = verticalDirection \* Math\.min\(copyHalfHeight \+ screenHalfHeight \+ cascadeEdgeGap, canvasHalfHeight - screenHalfHeight\);/);
   assert.match(css, /\[data-palitra-cascade\]\[data-cascade-ready="true"\] \.palitra-cascade-stage\s*\{[^}]*width:\s*100vw[^}]*margin-left:\s*calc\(50% - 50vw\)/s);
+  assert.doesNotMatch(css, /\.palitra-screen-cascade\s*\{[^}]*min-height:\s*280svh/s);
+  assert.doesNotMatch(css, /\.palitra-cascade-shell\s*\{[^}]*min-height:/s);
+  assert.match(css, /\[data-palitra-cascade\]\[data-cascade-ready="true"\]\s*\{[^}]*min-height:\s*280svh/s);
 });
 
 test("cases preserve v2 content and use two local optimized images", async () => {

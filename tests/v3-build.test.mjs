@@ -75,6 +75,10 @@ test("v3 production HTML preserves the landing contract", async () => {
   assert.match(html, /ai-директор по маркетингу доступен 24\/7 и знает всё о вашей рекламе и нашей работе над ней/);
   const cascadeImages = [...html.matchAll(/<img\b[^>]*class="palitra-cascade-screen"[^>]*>/g)].map((match) => match[0]);
   assert.equal(cascadeImages.length, 6);
+  const cascadeSources = cascadeImages.map((image) => image.match(/\bsrc="([^"]+)"/)?.[1]);
+  assert.ok(cascadeSources.every(Boolean));
+  assert.equal(new Set(cascadeSources).size, 6);
+  assert.doesNotMatch(html, /common\.png/);
   for (const image of cascadeImages) {
     assert.match(image, /\bwidth="\d+"/);
     assert.match(image, /\bheight="\d+"/);
