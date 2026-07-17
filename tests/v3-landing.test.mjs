@@ -59,6 +59,7 @@ test("v3 contains the approved section order and hero contract", async () => {
     "cohorts",
     "economics",
     "palitra",
+    "palitra-chat",
     "cases",
     "lead",
   ];
@@ -393,6 +394,60 @@ test("palitra uses the official logo and has a standalone preview", async () => 
   assert.match(preview, /import Palitra from "\.\.\/\.\.\/components\/Palitra\.astro"/);
   assert.match(preview, /<Palitra\s*\/>/);
   assert.doesNotMatch(preview, /SiteHeader|Economics|Cases|SiteFooter/);
+});
+
+test("palitra chat presents the approved screenshot in a standalone light section", async () => {
+  const componentPath = path.join(
+    v3Root,
+    "src",
+    "components",
+    "PalitraChat.astro",
+  );
+  const component = await readFile(componentPath, "utf8");
+  const screenshot = await readFile(
+    path.join(v3Root, "src", "assets", "palitra", "chat.jpg"),
+  );
+  const indexPage = await readFile(
+    path.join(v3Root, "src", "pages", "index.astro"),
+    "utf8",
+  );
+  const css = await readFile(
+    path.join(v3Root, "src", "styles", "global.css"),
+    "utf8",
+  );
+  const previewPath = path.join(
+    v3Root,
+    "src",
+    "pages",
+    "preview",
+    "palitra-chat.astro",
+  );
+  const preview = await readFile(previewPath, "utf8");
+
+  assert.ok(screenshot.byteLength > 0, "Palitra chat screenshot should exist");
+  assert.match(component, /import \{ Image \} from "astro:assets"/);
+  assert.match(component, /import chatScreenshot from "\.\.\/assets\/palitra\/chat\.jpg"/);
+  assert.match(component, /<h2>Управление в привычном чате AI-агента<\/h2>/);
+  assert.match(component, /class="palitra-chat-screen"/);
+  assert.match(component, /src=\{chatScreenshot\}/);
+  assert.match(component, /alt="Интерфейс чата AI-агента Palitra"/);
+  assert.match(indexPage, /import PalitraChat from "\.\.\/components\/PalitraChat\.astro"/);
+  assert.match(
+    indexPage,
+    /id="palitra"[\s\S]*id="palitra-chat"[\s\S]*id="cases"/,
+  );
+  assert.match(preview, /import PalitraChat from "\.\.\/\.\.\/components\/PalitraChat\.astro"/);
+  assert.match(preview, /<PalitraChat\s*\/>/);
+  assert.doesNotMatch(preview, /SiteHeader|Palitra\s+from|Cases|SiteFooter/);
+  assert.match(
+    css,
+    /\.palitra-chat\s*\{[^}]*background:\s*var\(--white\)/s,
+  );
+  assert.match(
+    css,
+    /\.palitra-chat-screen\s*\{[^}]*width:\s*min\(100%,\s*1180px\)[^}]*border:\s*1px solid var\(--light-line\)[^}]*border-radius:\s*8px/s,
+  );
+  assert.doesNotMatch(component, /<button|<p|data-|script/i);
 });
 
 test("cases preserve v2 content and use two local optimized images", async () => {
