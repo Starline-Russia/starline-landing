@@ -344,8 +344,28 @@ test("palitra uses the official logo and has a standalone preview", async () => 
   assert.match(component, /width="512"/);
   assert.match(component, /height="512"/);
   assert.doesNotMatch(component, /class="star"|<strong>Palitra<\/strong>/);
+  assert.match(component, /<p class="eyebrow">Новый подход к performance<\/p>/);
+  assert.match(
+    component,
+    /<h2>Используем <span>AI-платформу<\/span> для управления всеми маркетинговыми процессами<\/h2>/,
+  );
+  assert.match(
+    component,
+    /Palitra ускоряет анализ, отчётность и распределение бюджетов — решения остаются под контролем специалиста<\/p>/,
+  );
+  assert.match(component, /class="palitra-area-bullet"/);
+  assert.match(component, /src="\/assets\/starline-logo-v8-1\.png"/);
+  assert.match(component, /width="1024"/);
+  assert.match(component, /height="1024"/);
+  assert.doesNotMatch(component, /padStart|palitra-orbit|orbit-horizontal|orbit-vertical/);
   assert.match(css, /\.palitra-core \.palitra-logo\s*\{[^}]*object-fit:\s*contain/s);
   assert.match(css, /\.palitra-core \.palitra-logo\s*\{[^}]*border-radius:\s*50%/s);
+  assert.match(css, /\.palitra-area-bullet\s*\{[^}]*width:\s*18px[^}]*height:\s*18px/s);
+  assert.match(
+    css,
+    /\.palitra-heading h2\s*\{[^}]*font-size:\s*clamp\(42px,\s*4vw,\s*64px\)/s,
+  );
+  assert.doesNotMatch(css, /\.palitra-orbit|\.orbit-horizontal|\.orbit-vertical/);
   assert.ok(pageFiles.includes(previewPath), "standalone Palitra preview should exist");
 
   const preview = await readFile(previewPath, "utf8");

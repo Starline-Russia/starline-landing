@@ -43,6 +43,17 @@ test("v3 production HTML preserves the landing contract", async () => {
     html,
     /<img\b[^>]*class="palitra-logo"[^>]*src="\/assets\/palitra-logo-512\.png"[^>]*width="512"[^>]*height="512"[^>]*>/,
   );
+  assert.match(html, /Новый подход к performance/);
+  assert.match(
+    html,
+    /Используем <span>AI-платформу<\/span> для управления всеми маркетинговыми процессами/,
+  );
+  assert.match(
+    html,
+    /Palitra ускоряет анализ, отчётность и распределение бюджетов — решения остаются под контролем специалиста/,
+  );
+  assert.equal(count(html, /class="palitra-area-bullet"/g), 4);
+  assert.doesNotMatch(html, /palitra-orbit|orbit-horizontal|orbit-vertical/);
 });
 
 test("v3 production cases include intrinsic image metadata and Russian alt text", async () => {

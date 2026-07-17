@@ -4,14 +4,12 @@ import { palitraAreas } from "../data/site";
 
 <div class="palitra-layout shell">
   <div class="palitra-heading">
-    <p class="eyebrow">Palitra</p>
-    <h2>AI помогает<br /><span>видеть рост раньше</span></h2>
-    <p>Palitra ускоряет анализ, отчётность и распределение бюджетов — решения остаются под контролем senior-специалиста.</p>
+    <p class="eyebrow">Новый подход к performance</p>
+    <h2>Используем <span>AI-платформу</span> для управления всеми маркетинговыми процессами</h2>
+    <p>Palitra ускоряет анализ, отчётность и распределение бюджетов — решения остаются под контролем специалиста</p>
   </div>
 
   <div class="palitra-system">
-    <div class="palitra-orbit orbit-horizontal" aria-hidden="true"></div>
-    <div class="palitra-orbit orbit-vertical" aria-hidden="true"></div>
     <div class="palitra-core" aria-label="Palitra">
       <img
         class="palitra-logo"
@@ -22,9 +20,16 @@ import { palitraAreas } from "../data/site";
         height="512"
       />
     </div>
-    {palitraAreas.map((area, index) => (
-      <article class={`palitra-area area-${index + 1}`}>
-        <span>{String(index + 1).padStart(2, "0")}</span>
+    {palitraAreas.map((area) => (
+      <article class="palitra-area">
+        <img
+          class="palitra-area-bullet"
+          src="/assets/starline-logo-v8-1.png"
+          alt=""
+          aria-hidden="true"
+          width="1024"
+          height="1024"
+        />
         <h3>{area.title}</h3>
         <p>{area.text}</p>
       </article>
