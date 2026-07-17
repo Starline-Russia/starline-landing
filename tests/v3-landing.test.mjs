@@ -465,7 +465,8 @@ test("palitra screen cascade has six approved static screens and an isolated pre
   assert.match(component, /data-palitra-cascade/);
   assert.match(component, /data-palitra-cascade-stage/);
   assert.match(component, /data-palitra-cascade-copy/);
-  assert.equal((component.match(/class="palitra-cascade-screen/g) ?? []).length, 2);
+  assert.match(component, /class="palitra-cascade-screens"/);
+  assert.equal((component.match(/class="palitra-cascade-screen"(?=\s)/g) ?? []).length, 2);
   assert.match(component, /screens\.slice\(0,\s*3\)\.map/);
   assert.match(component, /screens\.slice\(3\)\.map/);
   assert.match(component, /ai-директор по маркетингу доступен 24\/7 и знает всё о вашей рекламе и нашей работе над ней/);
