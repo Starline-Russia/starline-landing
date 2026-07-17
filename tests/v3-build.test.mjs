@@ -54,7 +54,8 @@ test("v3 production HTML preserves the landing contract", async () => {
     /Palitra ускоряет анализ, отчётность и распределение бюджетов — решения остаются под контролем специалиста/,
   );
   assert.equal(count(html, /class="palitra-area-bullet"/g), 4);
-  assert.match(html, /Одобрение специалистом \(HEETL\)/);
+  assert.match(html, /Одобрение специалистом \(HITL\)/);
+  assert.doesNotMatch(html, /Одобрение специалистом \(HEETL\)/);
   assert.doesNotMatch(html, /Senior-специалист контролирует AI-процессы/);
   assert.doesNotMatch(html, /palitra-orbit|orbit-horizontal|orbit-vertical/);
 });

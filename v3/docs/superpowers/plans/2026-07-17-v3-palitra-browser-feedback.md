@@ -75,7 +75,9 @@
 
 - [x] Follow-up browser feedback: remove `всеми` from the heading and align each Starline bullet to the left of its title and description with a two-column grid.
 
-- [x] Follow-up browser feedback: add a square-cornered dashed border around `.palitra-system`, move the human-control label inside its bottom edge, and replace its copy with `Одобрение специалистом (HEETL)`.
+- [x] Follow-up browser feedback: add a square-cornered dashed border around `.palitra-system`, move the human-control label inside its bottom edge, and replace its copy with `Одобрение специалистом (HITL)`.
+
+- [x] Follow-up browser feedback: remove every horizontal divider from the four Palitra areas while retaining the dashed outer frame.
 
 - [x] Run `npm test` and confirm all source tests pass.
 

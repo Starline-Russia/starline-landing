@@ -361,8 +361,9 @@ test("palitra uses the official logo and has a standalone preview", async () => 
   assert.doesNotMatch(component, /padStart|palitra-orbit|orbit-horizontal|orbit-vertical/);
   assert.match(
     component,
-    /<div class="palitra-system">[\s\S]*<p class="human-control">Одобрение специалистом \(HEETL\)<\/p>\s*<\/div>/,
+    /<div class="palitra-system">[\s\S]*<p class="human-control">Одобрение специалистом \(HITL\)<\/p>\s*<\/div>/,
   );
+  assert.doesNotMatch(component, /\(HEETL\)/);
   assert.doesNotMatch(component, /Senior-специалист контролирует AI-процессы/);
   assert.match(css, /\.palitra-core \.palitra-logo\s*\{[^}]*object-fit:\s*contain/s);
   assert.match(css, /\.palitra-core \.palitra-logo\s*\{[^}]*border-radius:\s*50%/s);
@@ -380,6 +381,7 @@ test("palitra uses the official logo and has a standalone preview", async () => 
     css,
     /\.human-control\s*\{[^}]*position:\s*absolute[^}]*bottom:\s*20px[^}]*left:\s*50%/s,
   );
+  assert.doesNotMatch(css, /\.palitra-area\s*\{[^}]*border-top:/s);
   assert.match(
     css,
     /\.palitra-heading h2\s*\{[^}]*font-size:\s*clamp\(42px,\s*4vw,\s*64px\)/s,
