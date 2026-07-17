@@ -26,6 +26,7 @@ test("v3 production HTML preserves the landing contract", async () => {
     "economics",
     "palitra",
     "palitra-chat",
+    "palitra-screen-cascade",
     "cases",
     "lead",
   ]);
@@ -71,6 +72,15 @@ test("v3 production HTML preserves the landing contract", async () => {
     /\balt="Интерфейс чата AI-агента Palitra"/,
   );
   assert.match(palitraChatImages[0], /\bloading="lazy"/);
+  assert.match(html, /ai-директор по маркетингу доступен 24\/7 и знает всё о вашей рекламе и нашей работе над ней/);
+  const cascadeImages = [...html.matchAll(/<img\b[^>]*class="palitra-cascade-screen"[^>]*>/g)].map((match) => match[0]);
+  assert.equal(cascadeImages.length, 6);
+  for (const image of cascadeImages) {
+    assert.match(image, /\bwidth="\d+"/);
+    assert.match(image, /\bheight="\d+"/);
+    assert.match(image, /\balt="[А-Яа-яЁё][^"]+"/);
+    assert.match(image, /\bloading="lazy"/);
+  }
 });
 
 test("v3 production cases include intrinsic image metadata and Russian alt text", async () => {
