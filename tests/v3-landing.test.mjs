@@ -453,6 +453,8 @@ test("palitra chat presents the approved screenshot in a standalone light sectio
 test("palitra screen cascade has six approved static screens and an isolated preview", async () => {
   const componentPath = path.join(v3Root, "src", "components", "PalitraScreenCascade.astro");
   const component = await readFile(componentPath, "utf8");
+  const script = await readFile(path.join(v3Root, "src", "scripts", "site.ts"), "utf8");
+  const css = await readFile(path.join(v3Root, "src", "styles", "global.css"), "utf8");
   const indexPage = await readFile(path.join(v3Root, "src", "pages", "index.astro"), "utf8");
   const previewPath = path.join(v3Root, "src", "pages", "preview", "palitra-screen-cascade.astro");
   const preview = await readFile(previewPath, "utf8");
@@ -475,6 +477,17 @@ test("palitra screen cascade has six approved static screens and an isolated pre
   assert.match(preview, /import PalitraScreenCascade from "\.\.\/\.\.\/components\/PalitraScreenCascade\.astro"/);
   assert.match(preview, /<PalitraScreenCascade\s*\/>/);
   assert.doesNotMatch(preview, /SiteHeader|PalitraChat|Cases|SiteFooter/);
+  assert.match(script, /\[data-palitra-cascade\]/);
+  assert.match(script, /data-cascade-ready/);
+  assert.match(script, /requestAnimationFrame/);
+  assert.match(script, /passive:\s*true/);
+  assert.match(script, /prefers-reduced-motion:\s*reduce/);
+  assert.match(css, /\.palitra-screen-cascade\s*\{[^}]*background:\s*var\(--white\)/s);
+  assert.match(css, /\[data-cascade-ready="true"\]\s+\.palitra-cascade-stage\s*\{[^}]*position:\s*sticky/s);
+  assert.match(css, /\[data-palitra-cascade\]\[data-cascade-ready="true"\]\s+\.palitra-cascade-stage/);
+  assert.match(css, /\.palitra-cascade-screen\s*\{[^}]*border-radius:\s*8px[^}]*box-shadow:/s);
+  assert.match(css, /@media \(max-width:\s*640px\)[\s\S]*\.palitra-cascade-row\s*\{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
+  assert.match(css, /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*\.palitra-cascade-screens\s*\{[^}]*display:\s*grid/s);
 });
 
 test("cases preserve v2 content and use two local optimized images", async () => {
