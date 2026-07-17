@@ -504,7 +504,12 @@ test("palitra screen cascade has six approved static screens and an isolated pre
   assert.doesNotMatch(cascadeScreenTransition, /transition:[^;}]*transform/);
   assert.match(css, /\.palitra-cascade-screen-overlay\s*\{[^}]*display:\s*none/s);
   assert.match(css, /\.palitra-cascade-screen-overlay\s*\{[^}]*pointer-events:\s*none[^}]*transform:\s*translate\(-50%,\s*-50%\)\s*scale\(\.94\)/s);
+  assert.match(css, /\.palitra-cascade-screen:is\(:hover,\s*:focus-visible\)\s*\{[^}]*opacity:\s*0/s);
+  assert.match(css, /\.palitra-cascade-screen:focus-visible\s*\{[^}]*outline:\s*none/s);
+  assert.match(css, /\.palitra-cascade-screen-overlay\s*\{[^}]*transition:\s*opacity\s+260ms\s+ease,\s*transform\s+260ms\s+ease,\s*visibility\s+0s\s+linear\s+260ms/s);
   assert.match(css, /\.palitra-cascade-screen:is\(:hover,\s*:focus-visible\)\s*\+\s*\.palitra-cascade-screen-overlay\s*\{[^}]*z-index:\s*8[^}]*opacity:\s*1[^}]*transform:\s*translate\(-50%,\s*-50%\)\s*scale\(1\)/s);
+  assert.match(css, /\.palitra-cascade-screen:is\(:hover,\s*:focus-visible\)\s*\+\s*\.palitra-cascade-screen-overlay\s*\{[^}]*transition-delay:\s*0s/s);
+  assert.match(css, /\.palitra-cascade-screen:focus-visible\s*\+\s*\.palitra-cascade-screen-overlay\s*\{[^}]*outline:\s*2px\s+solid\s+var\(--violet\)[^}]*outline-offset:\s*6px/s);
   assert.match(css, /@media \(max-width:\s*640px\)[\s\S]*\.palitra-cascade-row\s*\{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
   assert.match(css, /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*\.palitra-cascade-screens\s*\{[^}]*display:\s*grid/s);
   assert.match(script, /const cascadeFinalScale = 0\.2;/);
