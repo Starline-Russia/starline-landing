@@ -478,6 +478,9 @@ test("palitra screen cascade has six approved static screens and an isolated pre
   assert.match(component, /доступен 24\/7 и знает всё о вашей рекламе и нашей работе над ней/);
   assert.match(component, /<span class="palitra-cascade-copy-accent">\s*AI-директор по маркетингу\s*<\/span>/);
   assert.match(component, /class="palitra-cascade-screen"[^>]*tabindex="0"/);
+  assert.equal((component.match(/class="palitra-cascade-screen-overlay"(?=\s)/g) ?? []).length, 2);
+  assert.match(component, /data-cascade-screen-overlay=\{screen\.key\}/);
+  assert.match(component, /class="palitra-cascade-screen-overlay"[^>]*aria-hidden="true"/);
   assert.match(indexPage, /import PalitraScreenCascade from "\.\.\/components\/PalitraScreenCascade\.astro"/);
   assert.match(indexPage, /id="palitra-chat"[\s\S]*id="palitra-screen-cascade"[\s\S]*id="cases"/);
   assert.match(preview, /import PalitraScreenCascade from "\.\.\/\.\.\/components\/PalitraScreenCascade\.astro"/);
@@ -494,7 +497,14 @@ test("palitra screen cascade has six approved static screens and an isolated pre
   assert.match(css, /\.palitra-cascade-screen\s*\{[^}]*border-radius:\s*8px[^}]*box-shadow:/s);
   assert.match(css, /\.palitra-cascade-copy\s*\{[^}]*clamp\(32px,\s*3\.5vw,\s*54px\)/s);
   assert.match(css, /\.palitra-cascade-copy-accent\s*\{[^}]*color:\s*var\(--violet\)/s);
-  assert.match(css, /\[data-palitra-cascade\]\[data-cascade-ready="true"\]\s+\.palitra-cascade-screen:is\(:hover,\s*:focus-visible\)\s*\{[^}]*z-index:\s*8[^}]*transform:\s*translate\(-50%,\s*-50%\)\s*scale\(1\)/s);
+  const cascadeScreenTransition = [...css.matchAll(/\[data-palitra-cascade\]\[data-cascade-ready="true"\]\s+\.palitra-cascade-screen\s*\{([^}]*)\}/g)]
+    .map((match) => match[1])
+    .find((rule) => rule.includes("transition:")) ?? "";
+  assert.match(cascadeScreenTransition, /transition:\s*box-shadow\s+260ms\s+ease/);
+  assert.doesNotMatch(cascadeScreenTransition, /transition:[^;}]*transform/);
+  assert.match(css, /\.palitra-cascade-screen-overlay\s*\{[^}]*display:\s*none/s);
+  assert.match(css, /\.palitra-cascade-screen-overlay\s*\{[^}]*pointer-events:\s*none[^}]*transform:\s*translate\(-50%,\s*-50%\)\s*scale\(\.94\)/s);
+  assert.match(css, /\.palitra-cascade-screen:is\(:hover,\s*:focus-visible\)\s*\+\s*\.palitra-cascade-screen-overlay\s*\{[^}]*z-index:\s*8[^}]*opacity:\s*1[^}]*transform:\s*translate\(-50%,\s*-50%\)\s*scale\(1\)/s);
   assert.match(css, /@media \(max-width:\s*640px\)[\s\S]*\.palitra-cascade-row\s*\{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
   assert.match(css, /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*\.palitra-cascade-screens\s*\{[^}]*display:\s*grid/s);
   assert.match(script, /const cascadeFinalScale = 0\.2;/);

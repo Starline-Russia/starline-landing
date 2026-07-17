@@ -77,6 +77,10 @@ test("v3 production HTML preserves the landing contract", async () => {
   const cascadeImages = [...html.matchAll(/<img\b[^>]*class="palitra-cascade-screen"[^>]*>/g)].map((match) => match[0]);
   assert.equal(cascadeImages.length, 6);
   assert.equal(cascadeImages.filter((image) => /\btabindex="0"/.test(image)).length, 6);
+  const cascadeOverlays = [...html.matchAll(/<img\b[^>]*class="palitra-cascade-screen-overlay"[^>]*>/g)].map((match) => match[0]);
+  assert.equal(cascadeOverlays.length, 6);
+  assert.ok(cascadeOverlays.every((image) => /\baria-hidden="true"/.test(image)));
+  assert.ok(cascadeOverlays.every((image) => /\balt(?:=""|\s)/.test(image)));
   const cascadeSources = cascadeImages.map((image) => image.match(/\bsrc="([^"]+)"/)?.[1]);
   assert.ok(cascadeSources.every(Boolean));
   assert.equal(new Set(cascadeSources).size, 6);
