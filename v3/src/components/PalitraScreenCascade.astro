@@ -22,15 +22,15 @@ const screens = [
     <div class="palitra-cascade-screens">
       <div class="palitra-cascade-row">
         {screens.slice(0, 3).map((screen, index) => (
-          <Image class="palitra-cascade-screen" data-cascade-screen={screen.key} data-cascade-index={index} data-cascade-x={screen.x} data-cascade-y={screen.y} src={screen.src} alt={screen.alt} loading="lazy" />
+          <Image class="palitra-cascade-screen" data-cascade-screen={screen.key} data-cascade-index={index} data-cascade-x={screen.x} data-cascade-y={screen.y} src={screen.src} alt={screen.alt} loading="lazy" tabindex="0" />
         ))}
       </div>
       <p class="palitra-cascade-copy" data-palitra-cascade-copy>
-        ai-директор по маркетингу доступен 24/7 и знает всё о вашей рекламе и нашей работе над ней
+        <span class="palitra-cascade-copy-accent">AI-директор по маркетингу</span> доступен 24/7 и знает всё о вашей рекламе и нашей работе над ней
       </p>
       <div class="palitra-cascade-row">
         {screens.slice(3).map((screen, index) => (
-          <Image class="palitra-cascade-screen" data-cascade-screen={screen.key} data-cascade-index={index + 3} data-cascade-x={screen.x} data-cascade-y={screen.y} src={screen.src} alt={screen.alt} loading="lazy" />
+          <Image class="palitra-cascade-screen" data-cascade-screen={screen.key} data-cascade-index={index + 3} data-cascade-x={screen.x} data-cascade-y={screen.y} src={screen.src} alt={screen.alt} loading="lazy" tabindex="0" />
         ))}
       </div>
     </div>

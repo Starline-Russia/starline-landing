@@ -72,9 +72,11 @@ test("v3 production HTML preserves the landing contract", async () => {
     /\balt="Интерфейс чата AI-агента Palitra"/,
   );
   assert.match(palitraChatImages[0], /\bloading="lazy"/);
-  assert.match(html, /ai-директор по маркетингу доступен 24\/7 и знает всё о вашей рекламе и нашей работе над ней/);
+  assert.match(html, /доступен 24\/7 и знает всё о вашей рекламе и нашей работе над ней/);
+  assert.match(html, /<span class="palitra-cascade-copy-accent">AI-директор по маркетингу<\/span>/);
   const cascadeImages = [...html.matchAll(/<img\b[^>]*class="palitra-cascade-screen"[^>]*>/g)].map((match) => match[0]);
   assert.equal(cascadeImages.length, 6);
+  assert.equal(cascadeImages.filter((image) => /\btabindex="0"/.test(image)).length, 6);
   const cascadeSources = cascadeImages.map((image) => image.match(/\bsrc="([^"]+)"/)?.[1]);
   assert.ok(cascadeSources.every(Boolean));
   assert.equal(new Set(cascadeSources).size, 6);
