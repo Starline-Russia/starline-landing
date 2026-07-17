@@ -24,11 +24,11 @@ test("v3 production HTML preserves the landing contract", async () => {
     "market-problem",
     "cohorts",
     "economics",
-    "process",
     "palitra",
     "cases",
     "lead",
   ]);
+  assert.doesNotMatch(html, /<section\b[^>]*\bid="process"/);
   assert.equal(count(html, /class="[^"]*\bhero-cta\b/g), 1);
   assert.equal(count(html, /class="[^"]*\btask-card\b/g), 6);
   assert.equal(count(html, /class="[^"]*\bservice-item\b/g), 6);

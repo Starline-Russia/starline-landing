@@ -46,6 +46,10 @@ test("v3 is an isolated Astro 7 project", async () => {
 
 test("v3 contains the approved section order and hero contract", async () => {
   const markup = await sourceBundle(".astro");
+  const indexPage = await readFile(
+    path.join(v3Root, "src", "pages", "index.astro"),
+    "utf8",
+  );
   const sectionIds = [
     "hero",
     "tasks",
@@ -54,7 +58,6 @@ test("v3 contains the approved section order and hero contract", async () => {
     "market-problem",
     "cohorts",
     "economics",
-    "process",
     "palitra",
     "cases",
     "lead",
@@ -77,6 +80,8 @@ test("v3 contains the approved section order and hero contract", async () => {
   assert.equal((markup.match(/class=\"hero-cta[^\"]*\"/g) ?? []).length, 1);
   assert.doesNotMatch(markup, /Как растёт GMV/);
   assert.doesNotMatch(markup, /star-large/);
+  assert.doesNotMatch(indexPage, /import Process from/);
+  assert.doesNotMatch(indexPage, /id="process"|<Process\s*\/>/);
 });
 
 test("hero has isolated responsive styling and a standalone preview", async () => {
