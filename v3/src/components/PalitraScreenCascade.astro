@@ -1,0 +1,38 @@
+---
+import { Image } from "astro:assets";
+import chat from "../assets/palitra/chat.jpg";
+import aiOptimization from "../assets/palitra/ai-optimization.png";
+import llmReporting from "../assets/palitra/llm-reporting.png";
+import contentGeneration from "../assets/palitra/content-generation.png";
+import mediaplans from "../assets/palitra/mediaplans.png";
+import pipelines from "../assets/palitra/pipelines.png";
+
+const screens = [
+  { key: "chat", src: chat, alt: "Интерфейс чата AI-агента Palitra", x: -370, y: -220 },
+  { key: "optimization", src: aiOptimization, alt: "Интерфейс AI-оптимизации рекламных кампаний Palitra", x: 370, y: -220 },
+  { key: "reporting", src: llmReporting, alt: "Интерфейс LLM-отчётности Palitra", x: -480, y: 0 },
+  { key: "content", src: contentGeneration, alt: "Интерфейс генерации контента Palitra", x: 480, y: 0 },
+  { key: "mediaplans", src: mediaplans, alt: "Интерфейс медиапланов Palitra", x: -370, y: 220 },
+  { key: "pipelines", src: pipelines, alt: "Интерфейс пайплайнов Palitra", x: 370, y: 220 },
+];
+---
+
+<div class="palitra-cascade-shell shell" data-palitra-cascade>
+  <div class="palitra-cascade-stage" data-palitra-cascade-stage>
+    <div class="palitra-cascade-gallery">
+      <div class="palitra-cascade-row">
+        {screens.slice(0, 3).map((screen, index) => (
+          <Image class="palitra-cascade-screen" data-cascade-screen={screen.key} data-cascade-index={index} data-cascade-x={screen.x} data-cascade-y={screen.y} src={screen.src} alt={screen.alt} loading="lazy" />
+        ))}
+      </div>
+      <p class="palitra-cascade-copy" data-palitra-cascade-copy>
+        ai-директор по маркетингу доступен 24/7 и знает всё о вашей рекламе и нашей работе над ней
+      </p>
+      <div class="palitra-cascade-row">
+        {screens.slice(3).map((screen, index) => (
+          <Image class="palitra-cascade-screen" data-cascade-screen={screen.key} data-cascade-index={index + 3} data-cascade-x={screen.x} data-cascade-y={screen.y} src={screen.src} alt={screen.alt} loading="lazy" />
+        ))}
+      </div>
+    </div>
+  </div>
+</div>

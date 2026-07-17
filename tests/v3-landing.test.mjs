@@ -450,6 +450,32 @@ test("palitra chat presents the approved screenshot in a standalone light sectio
   assert.doesNotMatch(component, /<button|<p|data-|script/i);
 });
 
+test("palitra screen cascade has six approved static screens and an isolated preview", async () => {
+  const componentPath = path.join(v3Root, "src", "components", "PalitraScreenCascade.astro");
+  const component = await readFile(componentPath, "utf8");
+  const indexPage = await readFile(path.join(v3Root, "src", "pages", "index.astro"), "utf8");
+  const previewPath = path.join(v3Root, "src", "pages", "preview", "palitra-screen-cascade.astro");
+  const preview = await readFile(previewPath, "utf8");
+  const sourceNames = ["chat.jpg", "ai-optimization.png", "llm-reporting.png", "content-generation.png", "mediaplans.png", "pipelines.png"];
+
+  for (const sourceName of sourceNames) {
+    const source = await readFile(path.join(v3Root, "src", "assets", "palitra", sourceName));
+    assert.ok(source.byteLength > 0, `${sourceName} should exist`);
+  }
+  assert.match(component, /data-palitra-cascade/);
+  assert.match(component, /data-palitra-cascade-stage/);
+  assert.match(component, /data-palitra-cascade-copy/);
+  assert.equal((component.match(/class="palitra-cascade-screen/g) ?? []).length, 2);
+  assert.match(component, /screens\.slice\(0,\s*3\)\.map/);
+  assert.match(component, /screens\.slice\(3\)\.map/);
+  assert.match(component, /ai-директор по маркетингу доступен 24\/7 и знает всё о вашей рекламе и нашей работе над ней/);
+  assert.match(indexPage, /import PalitraScreenCascade from "\.\.\/components\/PalitraScreenCascade\.astro"/);
+  assert.match(indexPage, /id="palitra-chat"[\s\S]*id="palitra-screen-cascade"[\s\S]*id="cases"/);
+  assert.match(preview, /import PalitraScreenCascade from "\.\.\/\.\.\/components\/PalitraScreenCascade\.astro"/);
+  assert.match(preview, /<PalitraScreenCascade\s*\/>/);
+  assert.doesNotMatch(preview, /SiteHeader|PalitraChat|Cases|SiteFooter/);
+});
+
 test("cases preserve v2 content and use two local optimized images", async () => {
   const markup = await sourceBundle(".astro");
   const data = await readFile(path.join(v3Root, "src", "data", "site.ts"), "utf8");
