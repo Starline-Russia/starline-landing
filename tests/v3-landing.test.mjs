@@ -362,10 +362,37 @@ test("lead form has only name and contact fields plus the GMV caveat", async () 
   assert.doesNotMatch(markup, /id=\"team\"|id=\"technology\"/);
 });
 
-test("economics states CPA and DRR growth in words", async () => {
-  const markup = await sourceBundle(".astro");
+test("economics explains GMV growth with an explicit non-guarantee caveat", async () => {
+  const economics = await readFile(
+    path.join(v3Root, "src", "components", "Economics.astro"),
+    "utf8",
+  );
+  const css = await readFile(path.join(v3Root, "src", "styles", "global.css"), "utf8");
+  const previewPath = path.join(v3Root, "src", "pages", "preview", "economics.astro");
+  const pageFiles = await collectFiles(path.join(v3Root, "src", "pages"), ".astro");
 
-  assert.match(markup, /CPA вырастет/);
-  assert.match(markup, /ДРР тоже вырастет/);
-  assert.doesNotMatch(markup, /CPA ↑|ДРР ↑/);
+  assert.match(economics, /CPA вырастет/);
+  assert.match(economics, /ДРР тоже вырастет/);
+  assert.match(economics, /GMV вырастет ещё сильнее/);
+  assert.match(economics, /\+20–50% GMV за 6–12 месяцев/);
+  assert.match(economics, /не является гарантией/);
+  assert.match(
+    economics,
+    /<div class="economics-heading-copy">\s*<p class="eyebrow dark">Экономика подхода<\/p>\s*<h2>/,
+  );
+  assert.ok(
+    economics.indexOf("CPA вырастет") < economics.indexOf("ДРР тоже вырастет") &&
+      economics.indexOf("ДРР тоже вырастет") < economics.indexOf("GMV вырастет ещё сильнее"),
+    "the economics flow should read from CPA through GMV",
+  );
+  assert.doesNotMatch(economics, /Допустимый компромисс|Целевой результат|tradeoff-arrow|GMV ↑↑/);
+  assert.ok(pageFiles.includes(previewPath), "standalone Economics preview should exist");
+
+  const preview = await readFile(previewPath, "utf8");
+  assert.match(preview, /import Economics from "\.\.\/\.\.\/components\/Economics\.astro"/);
+  assert.match(preview, /<Economics\s*\/>/);
+  assert.doesNotMatch(preview, /SiteHeader|Cohorts|Process|SiteFooter/);
+  assert.match(css, /\.economics-flow\s*\{[^}]*border-top:/s);
+  assert.match(css, /\.economics-step\s*\{[^}]*border-bottom:/s);
+  assert.match(css, /@media \(max-width: 900px\)\s*\{[\s\S]*?\.economics-layout\s*\{[^}]*grid-template-columns:\s*1fr/s);
 });
