@@ -488,6 +488,14 @@ test("palitra screen cascade has six approved static screens and an isolated pre
   assert.match(css, /\.palitra-cascade-screen\s*\{[^}]*border-radius:\s*8px[^}]*box-shadow:/s);
   assert.match(css, /@media \(max-width:\s*640px\)[\s\S]*\.palitra-cascade-row\s*\{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
   assert.match(css, /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*\.palitra-cascade-screens\s*\{[^}]*display:\s*grid/s);
+  assert.match(script, /const cascadeFinalScale = 0\.2;/);
+  assert.match(script, /const cascadeEdgeGap = 16;/);
+  assert.match(script, /const screensCanvas = scene\.querySelector<HTMLElement>\("\.palitra-cascade-screens"\);/);
+  assert.match(script, /const copyHalfWidth = copy\.clientWidth \/ 2;/);
+  assert.match(script, /const canvasHalfWidth = screensCanvas\.clientWidth \/ 2;/);
+  assert.match(script, /const finalX = horizontalDirection \* Math\.min\(copyHalfWidth \+ screenHalfWidth \+ cascadeEdgeGap, canvasHalfWidth - screenHalfWidth\);/);
+  assert.match(script, /const finalY = verticalDirection \* Math\.min\(copyHalfHeight \+ screenHalfHeight \+ cascadeEdgeGap, canvasHalfHeight - screenHalfHeight\);/);
+  assert.match(css, /\[data-palitra-cascade\]\[data-cascade-ready="true"\] \.palitra-cascade-stage\s*\{[^}]*width:\s*100vw[^}]*margin-left:\s*calc\(50% - 50vw\)/s);
 });
 
 test("cases preserve v2 content and use two local optimized images", async () => {
