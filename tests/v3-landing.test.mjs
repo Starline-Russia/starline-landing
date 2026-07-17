@@ -359,6 +359,11 @@ test("palitra uses the official logo and has a standalone preview", async () => 
   assert.match(component, /width="1024"/);
   assert.match(component, /height="1024"/);
   assert.doesNotMatch(component, /padStart|palitra-orbit|orbit-horizontal|orbit-vertical/);
+  assert.match(
+    component,
+    /<div class="palitra-system">[\s\S]*<p class="human-control">Одобрение специалистом \(HEETL\)<\/p>\s*<\/div>/,
+  );
+  assert.doesNotMatch(component, /Senior-специалист контролирует AI-процессы/);
   assert.match(css, /\.palitra-core \.palitra-logo\s*\{[^}]*object-fit:\s*contain/s);
   assert.match(css, /\.palitra-core \.palitra-logo\s*\{[^}]*border-radius:\s*50%/s);
   assert.match(css, /\.palitra-area-bullet\s*\{[^}]*width:\s*18px[^}]*height:\s*18px/s);
@@ -367,6 +372,14 @@ test("palitra uses the official logo and has a standalone preview", async () => 
     /\.palitra-area\s*\{[^}]*display:\s*grid[^}]*grid-template-columns:\s*18px minmax\(0,\s*1fr\)[^}]*column-gap:\s*10px/s,
   );
   assert.match(css, /\.palitra-area p\s*\{[^}]*grid-column:\s*2/s);
+  assert.match(
+    css,
+    /\.palitra-system\s*\{[^}]*border:\s*1px dashed rgba\(255,\s*255,\s*255,\s*0\.42\)/s,
+  );
+  assert.match(
+    css,
+    /\.human-control\s*\{[^}]*position:\s*absolute[^}]*bottom:\s*20px[^}]*left:\s*50%/s,
+  );
   assert.match(
     css,
     /\.palitra-heading h2\s*\{[^}]*font-size:\s*clamp\(42px,\s*4vw,\s*64px\)/s,
