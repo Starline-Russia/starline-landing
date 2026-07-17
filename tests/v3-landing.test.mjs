@@ -376,6 +376,16 @@ test("economics explains GMV growth with an explicit non-guarantee caveat", asyn
   assert.match(economics, /GMV вырастет ещё сильнее/);
   assert.match(economics, /\+20–50% GMV за 6–12 месяцев/);
   assert.match(economics, /не является гарантией/);
+  assert.equal(
+    (economics.match(/src="\/assets\/starline-logo-v8-1\.png"/g) ?? []).length,
+    3,
+    "each economics step should use the approved Starline logo asset instead of a numeric index",
+  );
+  assert.doesNotMatch(economics, /<strong>0[1-3]<\/strong>/);
+  assert.match(
+    economics,
+    /\/Диапазон зависит от исходной экономики, продукта и рынка и не является гарантией результата\//,
+  );
   assert.match(
     economics,
     /<div class="economics-heading-copy">\s*<p class="eyebrow dark">Экономика подхода<\/p>\s*<h2>/,
@@ -394,5 +404,8 @@ test("economics explains GMV growth with an explicit non-guarantee caveat", asyn
   assert.doesNotMatch(preview, /SiteHeader|Cohorts|Process|SiteFooter/);
   assert.match(css, /\.economics-flow\s*\{[^}]*border-top:/s);
   assert.match(css, /\.economics-step\s*\{[^}]*border-bottom:/s);
+  assert.match(css, /\.economics-bullet\s*\{[^}]*width:\s*24px/s);
+  assert.match(css, /\.star\s*\{[^}]*url\(["']?\/assets\/starline-logo-v8-1\.png["']?\)/s);
+  assert.doesNotMatch(css, /\.star\s*\{[^}]*clip-path:/s);
   assert.match(css, /@media \(max-width: 900px\)\s*\{[\s\S]*?\.economics-layout\s*\{[^}]*grid-template-columns:\s*1fr/s);
 });

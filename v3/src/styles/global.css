@@ -107,7 +107,7 @@ button:disabled, input:disabled { opacity: 0.55; cursor: not-allowed; }
 .hero-orbit { position: absolute; width: 82vw; aspect-ratio: 2.9; border: 1px solid rgba(197, 125, 251, 0.14); border-radius: 50%; pointer-events: none; }
 .hero-orbit-a { left: -19vw; bottom: 12vh; transform: rotate(-9deg); }
 .hero-orbit-b { right: -34vw; top: 17vh; transform: rotate(-14deg); }
-.star { display: block; width: 62px; aspect-ratio: 1; background: var(--gradient); clip-path: polygon(50% 0, 59% 39%, 100% 50%, 59% 61%, 50% 100%, 41% 61%, 0 50%, 41% 39%); }
+.star { display: block; width: 62px; aspect-ratio: 1; background: url("/assets/starline-logo-v8-1.png") center / contain no-repeat; }
 .hero-inner { position: relative; z-index: 2; display: flex; flex-direction: column; justify-content: flex-end; min-height: calc(100svh - 190px); }
 .hero-copy { margin: auto; padding-top: 70px; text-align: center; }
 .hero h1 { margin-bottom: 36px; font-size: clamp(54px, 6.2vw, 104px); font-weight: 600; line-height: 0.98; }
@@ -205,8 +205,8 @@ button:disabled, input:disabled { opacity: 0.55; cursor: not-allowed; }
 .economics-heading h2 { max-width: 980px; }
 .economics-heading > p:last-child { max-width: 520px; margin-bottom: 8px; color: var(--muted); font-size: 18px; }
 .economics-flow { align-self: start; border-top: 1px solid rgba(63, 9, 177, 0.2); }
-.economics-step { display: grid; grid-template-columns: 58px minmax(0, 1fr); gap: 20px; align-items: baseline; margin: 0; padding: 30px 0; border-bottom: 1px solid rgba(63, 9, 177, 0.2); }
-.economics-step strong { color: var(--purple); font: 600 13px var(--body); letter-spacing: 0.05em; }
+.economics-step { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 24px; align-items: center; margin: 0; padding: 30px 0; border-bottom: 1px solid rgba(63, 9, 177, 0.2); }
+.economics-bullet { width: 24px; height: 24px; align-self: center; object-fit: contain; }
 .economics-step span { color: var(--ink); font: 500 clamp(31px, 3.2vw, 50px)/1.04 var(--display); letter-spacing: -0.035em; }
 .economics-step:last-child span { color: var(--purple); }
 .economics-outcome { align-self: start; padding-top: 31px; border-top: 3px solid var(--purple); }
@@ -366,7 +366,8 @@ button:disabled, input:disabled { opacity: 0.55; cursor: not-allowed; }
   .market-signal p { font-size: 16px; }
   .economics-heading { grid-column: auto; }
   .economics-layout { gap: 40px; }
-  .economics-step { grid-template-columns: 42px minmax(0, 1fr); gap: 14px; padding: 24px 0; }
+  .economics-step { grid-template-columns: 20px minmax(0, 1fr); gap: 18px; padding: 24px 0; }
+  .economics-bullet { width: 20px; height: 20px; }
   .economics-step span { font-size: clamp(28px, 8vw, 40px); }
   .economics-outcome { padding-top: 26px; }
   .economics-outcome > strong { font-size: clamp(46px, 12vw, 62px); }

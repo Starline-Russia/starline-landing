@@ -21,6 +21,11 @@ Replace the legacy trade-off labels and symbolic GMV arrow with a clear editoria
 4. Present `+20–50% GMV за 6–12 месяцев` next to wording that the range depends on starting economics, product, and market and is not a guarantee.
 5. Retain the supporting consequences: more new clients, less dependence on retargeting, and more predictable economics.
 
+## Official logo asset
+
+- The three flow bullets use only the approved Starline mark from Google Drive: `Старлайн/Diz/logo/v8-1.png` ([Drive file](https://drive.google.com/file/d/1fqIxVrM0_CutV9DXDj_oNWZIgaXGJjQ0/view?usp=drivesdk), ID `1fqIxVrM0_CutV9DXDj_oNWZIgaXGJjQ0`).
+- The local copy is `public/assets/starline-logo-v8-1.png`. The shared `.star` CSS class also renders this file; do not recreate the mark with `clip-path`, a gradient, or another improvised shape.
+
 ## Layout and responsive behavior
 
 - Use one light editorial section with an open heading area, a three-step economics flow, and a distinct outcome/range area.
