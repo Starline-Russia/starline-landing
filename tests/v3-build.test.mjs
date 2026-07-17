@@ -46,8 +46,9 @@ test("v3 production HTML preserves the landing contract", async () => {
   assert.match(html, /Новый подход к performance/);
   assert.match(
     html,
-    /Используем <span>AI-платформу<\/span> для управления всеми маркетинговыми процессами/,
+    /Используем <span>AI-платформу<\/span> для управления маркетинговыми процессами/,
   );
+  assert.doesNotMatch(html, /для управления всеми маркетинговыми процессами/);
   assert.match(
     html,
     /Palitra ускоряет анализ, отчётность и распределение бюджетов — решения остаются под контролем специалиста/,

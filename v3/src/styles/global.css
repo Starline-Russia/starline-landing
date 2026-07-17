@@ -233,10 +233,10 @@ button:disabled, input:disabled { opacity: 0.55; cursor: not-allowed; }
 .palitra-heading h2 { margin-bottom: 26px; font-size: clamp(42px, 4vw, 64px); font-weight: 500; line-height: 1.04; }
 .palitra-heading > p:last-child { max-width: 510px; color: rgba(255, 255, 255, 0.66); font-size: 18px; }
 .palitra-system { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 190px 170px; min-height: 620px; padding: 40px 0; }
-.palitra-area { position: relative; z-index: 3; padding-top: 18px; border-top: 1px solid rgba(255, 255, 255, 0.25); }
-.palitra-area-bullet { width: 18px; height: 18px; object-fit: contain; }
-.palitra-area h3 { margin: 10px 0 12px; font-size: 27px; }
-.palitra-area p { margin-bottom: 0; color: rgba(255, 255, 255, 0.62); font-size: 14px; }
+.palitra-area { position: relative; z-index: 3; display: grid; grid-template-columns: 18px minmax(0, 1fr); column-gap: 10px; align-content: start; padding-top: 18px; border-top: 1px solid rgba(255, 255, 255, 0.25); }
+.palitra-area-bullet { width: 18px; height: 18px; margin-top: 5px; object-fit: contain; }
+.palitra-area h3 { margin: 0 0 12px; font-size: 27px; }
+.palitra-area p { grid-column: 2; margin-bottom: 0; color: rgba(255, 255, 255, 0.62); font-size: 14px; }
 .palitra-core { position: absolute; z-index: 4; top: 50%; left: 50%; display: grid; place-items: center; width: 230px; aspect-ratio: 1; transform: translate(-50%, -50%); }
 .palitra-core .palitra-logo { width: 230px; height: 230px; border-radius: 50%; object-fit: contain; filter: drop-shadow(0 0 35px rgba(197, 125, 251, 0.38)); }
 .human-control { grid-column: 1 / -1; margin: 10px 0 0; padding-top: 24px; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.2); color: rgba(255, 255, 255, 0.72); }

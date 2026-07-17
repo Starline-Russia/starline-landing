@@ -347,8 +347,9 @@ test("palitra uses the official logo and has a standalone preview", async () => 
   assert.match(component, /<p class="eyebrow">Новый подход к performance<\/p>/);
   assert.match(
     component,
-    /<h2>Используем <span>AI-платформу<\/span> для управления всеми маркетинговыми процессами<\/h2>/,
+    /<h2>Используем <span>AI-платформу<\/span> для управления маркетинговыми процессами<\/h2>/,
   );
+  assert.doesNotMatch(component, /для управления всеми маркетинговыми процессами/);
   assert.match(
     component,
     /Palitra ускоряет анализ, отчётность и распределение бюджетов — решения остаются под контролем специалиста<\/p>/,
@@ -361,6 +362,11 @@ test("palitra uses the official logo and has a standalone preview", async () => 
   assert.match(css, /\.palitra-core \.palitra-logo\s*\{[^}]*object-fit:\s*contain/s);
   assert.match(css, /\.palitra-core \.palitra-logo\s*\{[^}]*border-radius:\s*50%/s);
   assert.match(css, /\.palitra-area-bullet\s*\{[^}]*width:\s*18px[^}]*height:\s*18px/s);
+  assert.match(
+    css,
+    /\.palitra-area\s*\{[^}]*display:\s*grid[^}]*grid-template-columns:\s*18px minmax\(0,\s*1fr\)[^}]*column-gap:\s*10px/s,
+  );
+  assert.match(css, /\.palitra-area p\s*\{[^}]*grid-column:\s*2/s);
   assert.match(
     css,
     /\.palitra-heading h2\s*\{[^}]*font-size:\s*clamp\(42px,\s*4vw,\s*64px\)/s,

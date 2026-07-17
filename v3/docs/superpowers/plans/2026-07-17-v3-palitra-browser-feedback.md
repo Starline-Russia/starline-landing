@@ -31,7 +31,7 @@
 
 - [x] Add source assertions for:
   - `Новый подход к performance`;
-  - `Используем AI-платформу для управления всеми маркетинговыми процессами`;
+  - `Используем AI-платформу для управления маркетинговыми процессами`;
   - the approved description ending in `специалиста`;
   - four `.palitra-area-bullet` images using `/assets/starline-logo-v8-1.png`;
   - absence of numbered `padStart` markup and `palitra-orbit` markup/CSS.
@@ -52,7 +52,7 @@
 
 ```astro
 <p class="eyebrow">Новый подход к performance</p>
-<h2>Используем <span>AI-платформу</span> для управления всеми маркетинговыми процессами</h2>
+<h2>Используем <span>AI-платформу</span> для управления маркетинговыми процессами</h2>
 <p>Palitra ускоряет анализ, отчётность и распределение бюджетов — решения остаются под контролем специалиста</p>
 ```
 
@@ -72,6 +72,8 @@
 ```
 
 - [x] Add an `18px` desktop Starline bullet rule, tighten the longer heading to `clamp(42px, 4vw, 64px)`, and remove every orbit rule from desktop and mobile CSS.
+
+- [x] Follow-up browser feedback: remove `всеми` from the heading and align each Starline bullet to the left of its title and description with a two-column grid.
 
 - [x] Run `npm test` and confirm all source tests pass.
 
