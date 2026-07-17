@@ -326,6 +326,34 @@ test("cohorts has a standalone component preview", async () => {
   assert.doesNotMatch(preview, /SiteHeader|Hero|Tasks|Services|SiteFooter/);
 });
 
+test("palitra uses the official logo and has a standalone preview", async () => {
+  const component = await readFile(
+    path.join(v3Root, "src", "components", "Palitra.astro"),
+    "utf8",
+  );
+  const css = await readFile(path.join(v3Root, "src", "styles", "global.css"), "utf8");
+  const logo = await readFile(
+    path.join(v3Root, "public", "assets", "palitra-logo-512.png"),
+  );
+  const previewPath = path.join(v3Root, "src", "pages", "preview", "palitra.astro");
+  const pageFiles = await collectFiles(path.join(v3Root, "src", "pages"), ".astro");
+
+  assert.ok(logo.byteLength > 0, "official Palitra logo should exist");
+  assert.match(component, /class="palitra-logo"/);
+  assert.match(component, /src="\/assets\/palitra-logo-512\.png"/);
+  assert.match(component, /width="512"/);
+  assert.match(component, /height="512"/);
+  assert.doesNotMatch(component, /class="star"|<strong>Palitra<\/strong>/);
+  assert.match(css, /\.palitra-core \.palitra-logo\s*\{[^}]*object-fit:\s*contain/s);
+  assert.match(css, /\.palitra-core \.palitra-logo\s*\{[^}]*border-radius:\s*50%/s);
+  assert.ok(pageFiles.includes(previewPath), "standalone Palitra preview should exist");
+
+  const preview = await readFile(previewPath, "utf8");
+  assert.match(preview, /import Palitra from "\.\.\/\.\.\/components\/Palitra\.astro"/);
+  assert.match(preview, /<Palitra\s*\/>/);
+  assert.doesNotMatch(preview, /SiteHeader|Economics|Cases|SiteFooter/);
+});
+
 test("cases preserve v2 content and use two local optimized images", async () => {
   const markup = await sourceBundle(".astro");
   const data = await readFile(path.join(v3Root, "src", "data", "site.ts"), "utf8");

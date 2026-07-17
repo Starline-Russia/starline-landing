@@ -39,6 +39,10 @@ test("v3 production HTML preserves the landing contract", async () => {
   assert.doesNotMatch(html, /Как растет GMV|Как растёт GMV/);
   assert.match(html, /Реклама может выглядеть эффективной, пока бизнес почти не растёт/);
   assert.match(html, /не является гарантией результата/);
+  assert.match(
+    html,
+    /<img\b[^>]*class="palitra-logo"[^>]*src="\/assets\/palitra-logo-512\.png"[^>]*width="512"[^>]*height="512"[^>]*>/,
+  );
 });
 
 test("v3 production cases include intrinsic image metadata and Russian alt text", async () => {

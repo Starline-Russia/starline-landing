@@ -12,7 +12,16 @@ import { palitraAreas } from "../data/site";
   <div class="palitra-system">
     <div class="palitra-orbit orbit-horizontal" aria-hidden="true"></div>
     <div class="palitra-orbit orbit-vertical" aria-hidden="true"></div>
-    <div class="palitra-core" aria-label="Palitra"><span class="star" aria-hidden="true"></span><strong>Palitra</strong></div>
+    <div class="palitra-core" aria-label="Palitra">
+      <img
+        class="palitra-logo"
+        src="/assets/palitra-logo-512.png"
+        alt=""
+        aria-hidden="true"
+        width="512"
+        height="512"
+      />
+    </div>
     {palitraAreas.map((area, index) => (
       <article class={`palitra-area area-${index + 1}`}>
         <span>{String(index + 1).padStart(2, "0")}</span>
