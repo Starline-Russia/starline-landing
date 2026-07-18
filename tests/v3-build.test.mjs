@@ -25,7 +25,6 @@ test("v3 production HTML preserves the landing contract", async () => {
     "cohorts",
     "economics",
     "palitra",
-    "palitra-chat",
     "palitra-screen-cascade",
     "cases",
     "lead",
@@ -60,18 +59,11 @@ test("v3 production HTML preserves the landing contract", async () => {
   assert.doesNotMatch(html, /Одобрение специалистом \(HEETL\)/);
   assert.doesNotMatch(html, /Senior-специалист контролирует AI-процессы/);
   assert.doesNotMatch(html, /palitra-orbit|orbit-horizontal|orbit-vertical/);
-  assert.match(html, /Управление в привычном чате AI-агента/);
-  const palitraChatImages = [
-    ...html.matchAll(/<img\b[^>]*class="palitra-chat-screen"[^>]*>/g),
-  ].map((match) => match[0]);
-  assert.equal(palitraChatImages.length, 1);
-  assert.match(palitraChatImages[0], /\bwidth="1280"/);
-  assert.match(palitraChatImages[0], /\bheight="916"/);
   assert.match(
-    palitraChatImages[0],
-    /\balt="Интерфейс чата AI-агента Palitra"/,
+    html,
+    /<section\b[^>]*\bid="palitra-screen-cascade"[^>]*>[\s\S]*class="palitra-cascade-heading"[\s\S]*<h2>Управление в привычном чате AI-агента<\/h2>/,
   );
-  assert.match(palitraChatImages[0], /\bloading="lazy"/);
+  assert.doesNotMatch(html, /palitra-chat-screen/);
   assert.match(html, /доступен 24\/7 и знает всё о вашей рекламе и нашей работе над ней/);
   assert.match(html, /<span class="palitra-cascade-copy-accent">AI-директор по маркетингу<\/span>/);
   const cascadeTriggers = [...html.matchAll(/<button\b[^>]*class="palitra-cascade-trigger"[^>]*>/g)].map((match) => match[0]);
