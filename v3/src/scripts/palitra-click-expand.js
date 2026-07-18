@@ -16,12 +16,14 @@ export function setupPalitraClickExpand(scene, options) {
   let activeSource = null;
   let animationFrame = 0;
   let closeTimer = 0;
+  let isClosing = false;
 
   const clearPending = () => {
     if (animationFrame) cancelAnimationFrame(animationFrame);
     if (closeTimer) clearTimeout(closeTimer);
     animationFrame = 0;
     closeTimer = 0;
+    isClosing = false;
   };
 
   const setRect = (prefix, rect) => {
@@ -63,6 +65,9 @@ export function setupPalitraClickExpand(scene, options) {
   };
 
   const finishClose = () => {
+    if (!isClosing) return;
+    isClosing = false;
+    if (closeTimer) clearTimeout(closeTimer);
     closeTimer = 0;
     expandLayer.hidden = true;
     expandImage.removeAttribute("src");
@@ -76,11 +81,12 @@ export function setupPalitraClickExpand(scene, options) {
   const closeExpanded = () => {
     if (!expandLayer || expandLayer.hidden || !expandImage || !activeSource) return;
     clearPending();
+    isClosing = true;
     setRect("--expand", activeSource.getBoundingClientRect());
     expandLayer.removeAttribute("data-open");
     expandImage.removeAttribute("data-expanded");
     if (motionQuery.matches) finishClose();
-    else closeTimer = setTimeout(finishClose, 360);
+    else closeTimer = setTimeout(finishClose, 450);
   };
 
   const openExpanded = (trigger) => {
@@ -103,15 +109,22 @@ export function setupPalitraClickExpand(scene, options) {
     }
     animationFrame = requestAnimationFrame(() => {
       animationFrame = 0;
-      if (expandLayer.hidden) return;
-      expandLayer.dataset.open = "true";
-      expandImage.dataset.expanded = "true";
-      expandImage.focus();
+      if (expandLayer.hidden || isClosing) return;
+      animationFrame = requestAnimationFrame(() => {
+        animationFrame = 0;
+        if (expandLayer.hidden || isClosing) return;
+        expandLayer.dataset.open = "true";
+        expandImage.dataset.expanded = "true";
+        expandImage.focus();
+      });
     });
   };
 
   triggers.forEach((trigger) => trigger.addEventListener("click", () => openExpanded(trigger)));
   expandImage?.addEventListener("click", closeExpanded);
+  expandImage?.addEventListener("transitionend", (event) => {
+    if (event.target === expandImage) finishClose();
+  });
   expandLayer?.addEventListener("click", (event) => {
     if (event.target === expandLayer) closeExpanded();
   });

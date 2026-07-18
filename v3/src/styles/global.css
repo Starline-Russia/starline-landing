@@ -21,7 +21,7 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; overflow-x: clip; background: var(--night); }
+html { scroll-behavior: smooth; overflow-x: clip; scrollbar-gutter: stable; background: var(--night); }
 body { margin: 0; overflow-x: clip; color: var(--ink); background: var(--paper); font-family: var(--body); line-height: 1.5; }
 body, button, input { font-family: var(--body); }
 button, input { font-size: inherit; }
@@ -292,6 +292,7 @@ button:disabled, input:disabled { opacity: 0.55; cursor: not-allowed; }
 [data-palitra-cascade][data-cascade-ready="true"] .palitra-cascade-trigger { position: absolute; top: 50%; left: 50%; width: min(72vw, 920px); transform: translate(-50%, -50%) translate(var(--cascade-x, 0px), var(--cascade-y, 0px)) scale(var(--cascade-scale, 1)); transform-origin: center; will-change: transform; }
 [data-palitra-cascade][data-cascade-ready="true"] .palitra-cascade-trigger[data-cascade-index="0"] { z-index: 6; }
 [data-palitra-cascade][data-cascade-ready="true"] .palitra-cascade-trigger:not([data-cascade-index="0"]) { z-index: 1; }
+[data-palitra-cascade][data-cascade-ready="true"] .palitra-cascade-trigger:focus-visible { z-index: 8; }
 [data-palitra-cascade][data-cascade-ready="true"] .palitra-cascade-copy { position: absolute; z-index: 7; top: 50%; left: 50%; width: min(52vw, 620px); margin: 0; opacity: var(--cascade-copy-opacity, 0); pointer-events: none; transform: translate(-50%, -50%); }
 .palitra-expand-layer {
   position: fixed;

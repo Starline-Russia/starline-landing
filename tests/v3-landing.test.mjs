@@ -474,9 +474,14 @@ test("palitra screen cascade has six approved static screens and an isolated pre
   assert.doesNotMatch(css, /\.palitra-cascade-trigger\s*\{[^}]*transition:[^;}]*box-shadow/s);
   assert.doesNotMatch(css, /\.palitra-cascade-screen:is\(:hover,\s*:focus-visible\)\s*\+/);
   assert.match(css, /\.palitra-cascade-trigger\s*\{[^}]*cursor:\s*pointer/s);
+  assert.match(
+    css,
+    /\[data-palitra-cascade\]\[data-cascade-ready="true"\]\s+\.palitra-cascade-trigger:focus-visible\s*\{[^}]*z-index:\s*8/s,
+  );
   assert.match(css, /\.palitra-expand-layer\s*\{[^}]*position:\s*fixed[^}]*background:\s*var\(--white\)/s);
   assert.match(css, /\.palitra-expand-image\s*\{[^}]*max-width:\s*1180px/s);
   assert.match(css, /html\[data-cascade-expanded="true"\]\s*\{[^}]*overflow:\s*hidden/s);
+  assert.match(css, /html\s*\{[^}]*scrollbar-gutter:\s*stable/s);
   assert.match(script, /getBoundingClientRect/);
   assert.match(script, /data-cascade-expand-trigger/);
   assert.match(script, /event\.key === "Escape"/);

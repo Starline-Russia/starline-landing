@@ -96,7 +96,7 @@ function createScheduler() {
     clearTimeout(id) {
       timers.delete(id);
     },
-    flushFrames() {
+    flushFrame() {
       for (const [id, callback] of [...frames]) {
         frames.delete(id);
         callback();
@@ -112,6 +112,11 @@ function createScheduler() {
       return frames.size;
     },
   };
+}
+
+function flushOpen(scheduler) {
+  scheduler.flushFrame();
+  scheduler.flushFrame();
 }
 
 function createFixture({
@@ -185,8 +190,16 @@ test("opens from the source bounds and caps the target at 1180px", () => {
     "--expand-target-width": "1180px",
     "--expand-target-height": "663.75px",
   });
-  scheduler.flushFrames();
+  assert.equal(layer.dataset.open, undefined);
+  assert.equal(image.dataset.expanded, undefined);
+  assert.equal(scheduler.frameCount(), 1);
+  scheduler.flushFrame();
+  assert.equal(layer.dataset.open, undefined);
+  assert.equal(image.dataset.expanded, undefined);
+  assert.equal(scheduler.frameCount(), 1);
+  scheduler.flushFrame();
   assert.equal(layer.dataset.open, "true");
+  assert.equal(image.dataset.expanded, "true");
   assert.equal(image.styleValues["--expand-target-width"], "1180px");
   assert.equal(documentElement.dataset.cascadeExpanded, "true");
   assert.equal(image.focusCount, 1);
@@ -251,7 +264,7 @@ test("recomputes a height-capped portrait target after window and visual viewpor
 test("image click, backdrop, and Escape reverse, retain scroll lock, and return focus", () => {
   const { documentElement, eventTarget, image, layer, scheduler, source, trigger } = createFixture();
   trigger.dispatch("click");
-  scheduler.flushFrames();
+  flushOpen(scheduler);
   source.rect = { left: 80, top: 90, width: 280, height: 158 };
   image.dispatch("click");
   assert.equal(image.styleValues["--expand-left"], "80px");
@@ -259,14 +272,16 @@ test("image click, backdrop, and Escape reverse, retain scroll lock, and return 
   assert.equal(documentElement.dataset.cascadeExpanded, "true");
   assert.equal(layer.hidden, false);
   assert.equal(image.src, "/screens/chat.webp");
-  scheduler.flushTimers();
+  image.dispatch("transitionend", { propertyName: "width" });
   assert.equal(layer.hidden, true);
   assert.equal(documentElement.dataset.cascadeExpanded, undefined);
   assert.equal(image.src, "");
   assert.equal(trigger.focusCount, 1);
+  scheduler.flushTimers();
+  assert.equal(trigger.focusCount, 1);
 
   trigger.dispatch("click");
-  scheduler.flushFrames();
+  flushOpen(scheduler);
   layer.dispatch("click", { target: layer });
   assert.equal(documentElement.dataset.cascadeExpanded, "true");
   scheduler.flushTimers();
@@ -275,7 +290,7 @@ test("image click, backdrop, and Escape reverse, retain scroll lock, and return 
   assert.equal(trigger.focusCount, 2);
 
   trigger.dispatch("click");
-  scheduler.flushFrames();
+  flushOpen(scheduler);
   eventTarget.dispatch("keydown", { key: "Escape" });
   assert.equal(documentElement.dataset.cascadeExpanded, "true");
   scheduler.flushTimers();
@@ -288,7 +303,7 @@ test("Tab remains inside the expanded dialog", () => {
   const { eventTarget, image, scheduler, trigger } = createFixture();
   let preventDefaultCount = 0;
   trigger.dispatch("click");
-  scheduler.flushFrames();
+  flushOpen(scheduler);
 
   eventTarget.dispatch("keydown", {
     key: "Tab",
@@ -306,7 +321,27 @@ test("Escape before the open frame cannot reopen the layer", () => {
   trigger.dispatch("click");
   eventTarget.dispatch("keydown", { key: "Escape" });
 
-  scheduler.flushFrames();
+  scheduler.flushFrame();
+  scheduler.flushFrame();
+  assert.equal(layer.dataset.open, undefined);
+  assert.equal(image.dataset.expanded, undefined);
+  assert.equal(documentElement.dataset.cascadeExpanded, "true");
+  scheduler.flushTimers();
+  assert.equal(layer.hidden, true);
+  assert.equal(documentElement.dataset.cascadeExpanded, undefined);
+  assert.equal(trigger.focusCount, 1);
+});
+
+test("Escape between the two open frames cannot reopen the layer", () => {
+  const { documentElement, eventTarget, image, layer, scheduler, trigger } = createFixture();
+  trigger.dispatch("click");
+  scheduler.flushFrame();
+  assert.equal(layer.dataset.open, undefined);
+  assert.equal(image.dataset.expanded, undefined);
+  assert.equal(scheduler.frameCount(), 1);
+  eventTarget.dispatch("keydown", { key: "Escape" });
+
+  scheduler.flushFrame();
   assert.equal(layer.dataset.open, undefined);
   assert.equal(image.dataset.expanded, undefined);
   assert.equal(documentElement.dataset.cascadeExpanded, "true");
@@ -319,10 +354,13 @@ test("Escape before the open frame cannot reopen the layer", () => {
 test("reopening before the close timer cancels the stale close", () => {
   const { documentElement, image, layer, scheduler, trigger } = createFixture();
   trigger.dispatch("click");
-  scheduler.flushFrames();
+  flushOpen(scheduler);
   image.dispatch("click");
   trigger.dispatch("click");
-  scheduler.flushFrames();
+  image.dispatch("transitionend", { propertyName: "height" });
+  assert.equal(layer.hidden, false);
+  assert.equal(documentElement.dataset.cascadeExpanded, "true");
+  flushOpen(scheduler);
   scheduler.flushTimers();
 
   assert.equal(layer.hidden, false);
