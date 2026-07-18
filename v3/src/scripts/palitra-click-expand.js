@@ -31,19 +31,35 @@ export function setupPalitraClickExpand(scene, options) {
     expandImage?.style.setProperty(`${prefix}-height`, `${rect.height}px`);
   };
 
+  const getViewportBounds = () => {
+    const visualViewport = viewport.visualViewport;
+    return {
+      height: visualViewport?.height ?? viewport.innerHeight,
+      left: visualViewport?.offsetLeft ?? 0,
+      top: visualViewport?.offsetTop ?? 0,
+      width: visualViewport?.width ?? viewport.innerWidth,
+    };
+  };
+
   const getTargetRect = (source) => {
+    const viewportBounds = getViewportBounds();
     const ratio = source.naturalWidth / source.naturalHeight || source.clientWidth / source.clientHeight;
-    const margin = Math.max(20, Math.min(56, viewport.innerWidth * 0.04));
-    const maxWidth = Math.min(1180, viewport.innerWidth - margin * 2);
-    const maxHeight = viewport.innerHeight - margin * 2;
+    const margin = Math.max(20, Math.min(56, viewportBounds.width * 0.04));
+    const maxWidth = Math.min(1180, viewportBounds.width - margin * 2);
+    const maxHeight = viewportBounds.height - margin * 2;
     const width = Math.min(maxWidth, maxHeight * ratio);
     const height = width / ratio;
     return {
-      left: (viewport.innerWidth - width) / 2,
-      top: (viewport.innerHeight - height) / 2,
+      left: viewportBounds.left + (viewportBounds.width - width) / 2,
+      top: viewportBounds.top + (viewportBounds.height - height) / 2,
       width,
       height,
     };
+  };
+
+  const updateTargetRect = () => {
+    if (!expandLayer || expandLayer.hidden || !activeSource) return;
+    setRect("--expand-target", getTargetRect(activeSource));
   };
 
   const finishClose = () => {
@@ -51,6 +67,7 @@ export function setupPalitraClickExpand(scene, options) {
     expandLayer.hidden = true;
     expandImage.removeAttribute("src");
     expandImage.removeAttribute("data-expanded");
+    delete documentElement.dataset.cascadeExpanded;
     activeTrigger?.focus();
     activeTrigger = null;
     activeSource = null;
@@ -62,7 +79,6 @@ export function setupPalitraClickExpand(scene, options) {
     setRect("--expand", activeSource.getBoundingClientRect());
     expandLayer.removeAttribute("data-open");
     expandImage.removeAttribute("data-expanded");
-    delete documentElement.dataset.cascadeExpanded;
     if (motionQuery.matches) finishClose();
     else closeTimer = setTimeout(finishClose, 360);
   };
@@ -99,6 +115,8 @@ export function setupPalitraClickExpand(scene, options) {
   expandLayer?.addEventListener("click", (event) => {
     if (event.target === expandLayer) closeExpanded();
   });
+  viewport.addEventListener("resize", updateTargetRect, { passive: true });
+  viewport.visualViewport?.addEventListener("resize", updateTargetRect, { passive: true });
   eventTarget.addEventListener("keydown", (event) => {
     if (!expandLayer || expandLayer.hidden) return;
     if (event.key === "Escape") closeExpanded();
