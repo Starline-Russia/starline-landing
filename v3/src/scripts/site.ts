@@ -1,3 +1,5 @@
+import { setupPalitraLightbox } from "./palitra-lightbox.js";
+
 document.documentElement.classList.add("js");
 
 const header = document.querySelector<HTMLElement>("[data-site-header]");
@@ -114,53 +116,13 @@ for (const scene of cascadeScenes) {
 }
 
 for (const scene of cascadeScenes) {
-  const triggers = Array.from(scene.querySelectorAll<HTMLButtonElement>("[data-cascade-lightbox-trigger]"));
-  const lightbox = scene.querySelector<HTMLElement>("[data-cascade-lightbox]");
-  const lightboxImage = scene.querySelector<HTMLImageElement>("[data-cascade-lightbox-image]");
-  const closeButton = scene.querySelector<HTMLButtonElement>("[data-cascade-lightbox-close]");
-  let activeTrigger: HTMLButtonElement | null = null;
-  let closeTimer = 0;
-
-  const openLightbox = (trigger: HTMLButtonElement) => {
-    const source = trigger.querySelector<HTMLImageElement>(".palitra-cascade-screen");
-    if (!lightbox || !lightboxImage || !closeButton || !source) return;
-    window.clearTimeout(closeTimer);
-    activeTrigger = trigger;
-    lightboxImage.src = source.currentSrc || source.src;
-    lightboxImage.alt = source.alt;
-    lightbox.hidden = false;
-    document.documentElement.dataset.lightboxOpen = "true";
-    window.requestAnimationFrame(() => {
-      lightbox.dataset.open = "true";
-      closeButton.focus();
-    });
-  };
-
-  const closeLightbox = () => {
-    if (!lightbox || lightbox.hidden) return;
-    lightbox.removeAttribute("data-open");
-    delete document.documentElement.dataset.lightboxOpen;
-    const finish = () => {
-      lightbox.hidden = true;
-      lightboxImage?.removeAttribute("src");
-      activeTrigger?.focus();
-      activeTrigger = null;
-    };
-    if (cascadeMotionQuery.matches) finish();
-    else closeTimer = window.setTimeout(finish, 220);
-  };
-
-  triggers.forEach((trigger) => trigger.addEventListener("click", () => openLightbox(trigger)));
-  closeButton?.addEventListener("click", closeLightbox);
-  lightbox?.addEventListener("click", (event) => {
-    if (event.target === lightbox) closeLightbox();
-  });
-  document.addEventListener("keydown", (event) => {
-    if (!lightbox || lightbox.hidden) return;
-    if (event.key === "Escape") closeLightbox();
-    if (event.key === "Tab") {
-      event.preventDefault();
-      closeButton?.focus();
-    }
+  setupPalitraLightbox(scene, {
+    documentElement: document.documentElement,
+    eventTarget: document,
+    motionQuery: cascadeMotionQuery,
+    requestAnimationFrame: window.requestAnimationFrame.bind(window),
+    cancelAnimationFrame: window.cancelAnimationFrame.bind(window),
+    setTimeout: window.setTimeout.bind(window),
+    clearTimeout: window.clearTimeout.bind(window),
   });
 }

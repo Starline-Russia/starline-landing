@@ -453,7 +453,9 @@ test("palitra chat presents the approved screenshot in a standalone light sectio
 test("palitra screen cascade has six approved static screens and an isolated preview", async () => {
   const componentPath = path.join(v3Root, "src", "components", "PalitraScreenCascade.astro");
   const component = await readFile(componentPath, "utf8");
-  const script = await readFile(path.join(v3Root, "src", "scripts", "site.ts"), "utf8");
+  const siteScript = await readFile(path.join(v3Root, "src", "scripts", "site.ts"), "utf8");
+  const lightboxScript = await readFile(path.join(v3Root, "src", "scripts", "palitra-lightbox.js"), "utf8");
+  const script = `${siteScript}\n${lightboxScript}`;
   const css = await readFile(path.join(v3Root, "src", "styles", "global.css"), "utf8");
   const indexPage = await readFile(path.join(v3Root, "src", "pages", "index.astro"), "utf8");
   const previewPath = path.join(v3Root, "src", "pages", "preview", "palitra-screen-cascade.astro");
@@ -498,11 +500,8 @@ test("palitra screen cascade has six approved static screens and an isolated pre
   assert.match(css, /\.palitra-cascade-screen\s*\{[^}]*border-radius:\s*8px[^}]*box-shadow:/s);
   assert.match(css, /\.palitra-cascade-copy\s*\{[^}]*clamp\(32px,\s*3\.5vw,\s*54px\)/s);
   assert.match(css, /\.palitra-cascade-copy-accent\s*\{[^}]*color:\s*var\(--violet\)/s);
-  const cascadeScreenTransition = [...css.matchAll(/\[data-palitra-cascade\]\[data-cascade-ready="true"\]\s+\.palitra-cascade-trigger\s*\{([^}]*)\}/g)]
-    .map((match) => match[1])
-    .find((rule) => rule.includes("transition:")) ?? "";
-  assert.match(cascadeScreenTransition, /transition:\s*box-shadow\s+260ms\s+ease/);
-  assert.doesNotMatch(cascadeScreenTransition, /transition:[^;}]*transform/);
+  assert.match(css, /\.palitra-cascade-screen\s*\{[^}]*transition:\s*box-shadow\s+260ms\s+ease/s);
+  assert.doesNotMatch(css, /\.palitra-cascade-trigger\s*\{[^}]*transition:[^;}]*box-shadow/s);
   assert.doesNotMatch(css, /\.palitra-cascade-screen:is\(:hover,\s*:focus-visible\)\s*\+/);
   assert.match(css, /\.palitra-cascade-trigger\s*\{[^}]*cursor:\s*pointer/s);
   assert.match(css, /\.palitra-lightbox\s*\{[^}]*position:\s*fixed[^}]*inset:\s*0[^}]*z-index:\s*100/s);
