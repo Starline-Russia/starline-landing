@@ -22,10 +22,18 @@ const screens = [
     <div class="palitra-cascade-screens">
       <div class="palitra-cascade-row">
         {screens.slice(0, 3).map((screen, index) => (
-          <>
-            <Image class="palitra-cascade-screen" data-cascade-screen={screen.key} data-cascade-index={index} data-cascade-x={screen.x} data-cascade-y={screen.y} src={screen.src} alt={screen.alt} loading="lazy" tabindex="0" />
-            <Image class="palitra-cascade-screen-overlay" data-cascade-screen-overlay={screen.key} src={screen.src} alt="" aria-hidden="true" loading="lazy" />
-          </>
+          <button
+            class="palitra-cascade-trigger"
+            type="button"
+            data-cascade-screen={screen.key}
+            data-cascade-index={index}
+            data-cascade-x={screen.x}
+            data-cascade-y={screen.y}
+            data-cascade-lightbox-trigger
+            aria-label={`Открыть ${screen.alt.toLowerCase()}`}
+          >
+            <Image class="palitra-cascade-screen" src={screen.src} alt={screen.alt} loading="lazy" />
+          </button>
         ))}
       </div>
       <p class="palitra-cascade-copy" data-palitra-cascade-copy>
@@ -33,12 +41,26 @@ const screens = [
       </p>
       <div class="palitra-cascade-row">
         {screens.slice(3).map((screen, index) => (
-          <>
-            <Image class="palitra-cascade-screen" data-cascade-screen={screen.key} data-cascade-index={index + 3} data-cascade-x={screen.x} data-cascade-y={screen.y} src={screen.src} alt={screen.alt} loading="lazy" tabindex="0" />
-            <Image class="palitra-cascade-screen-overlay" data-cascade-screen-overlay={screen.key} src={screen.src} alt="" aria-hidden="true" loading="lazy" />
-          </>
+          <button
+            class="palitra-cascade-trigger"
+            type="button"
+            data-cascade-screen={screen.key}
+            data-cascade-index={index + 3}
+            data-cascade-x={screen.x}
+            data-cascade-y={screen.y}
+            data-cascade-lightbox-trigger
+            aria-label={`Открыть ${screen.alt.toLowerCase()}`}
+          >
+            <Image class="palitra-cascade-screen" src={screen.src} alt={screen.alt} loading="lazy" />
+          </button>
         ))}
       </div>
+    </div>
+  </div>
+  <div class="palitra-lightbox" data-cascade-lightbox role="dialog" aria-modal="true" aria-label="Просмотр скриншота Palitra" hidden>
+    <button class="palitra-lightbox-close" type="button" data-cascade-lightbox-close aria-label="Закрыть просмотр">×</button>
+    <div class="palitra-lightbox-frame">
+      <img class="palitra-lightbox-image" data-cascade-lightbox-image src="" alt="" />
     </div>
   </div>
 </div>

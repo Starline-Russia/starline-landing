@@ -472,15 +472,16 @@ test("palitra screen cascade has six approved static screens and an isolated pre
   assert.match(component, /data-palitra-cascade-stage/);
   assert.match(component, /data-palitra-cascade-copy/);
   assert.match(component, /class="palitra-cascade-screens"/);
-  assert.equal((component.match(/class="palitra-cascade-screen"(?=\s)/g) ?? []).length, 2);
+  assert.equal((component.match(/data-cascade-lightbox-trigger/g) ?? []).length, 2);
+  assert.match(component, /<button[^>]*class="palitra-cascade-trigger"[^>]*type="button"[^>]*data-cascade-screen=/s);
+  assert.match(component, /data-cascade-lightbox[^>]*role="dialog"[^>]*aria-modal="true"/s);
+  assert.match(component, /data-cascade-lightbox-image/);
+  assert.match(component, /data-cascade-lightbox-close/);
+  assert.doesNotMatch(component, /palitra-cascade-screen-overlay/);
   assert.match(component, /screens\.slice\(0,\s*3\)\.map/);
   assert.match(component, /screens\.slice\(3\)\.map/);
   assert.match(component, /доступен 24\/7 и знает всё о вашей рекламе и нашей работе над ней/);
   assert.match(component, /<span class="palitra-cascade-copy-accent">\s*AI-директор по маркетингу\s*<\/span>/);
-  assert.match(component, /class="palitra-cascade-screen"[^>]*tabindex="0"/);
-  assert.equal((component.match(/class="palitra-cascade-screen-overlay"(?=\s)/g) ?? []).length, 2);
-  assert.match(component, /data-cascade-screen-overlay=\{screen\.key\}/);
-  assert.match(component, /class="palitra-cascade-screen-overlay"[^>]*aria-hidden="true"/);
   assert.match(indexPage, /import PalitraScreenCascade from "\.\.\/components\/PalitraScreenCascade\.astro"/);
   assert.match(indexPage, /id="palitra-chat"[\s\S]*id="palitra-screen-cascade"[\s\S]*id="cases"/);
   assert.match(preview, /import PalitraScreenCascade from "\.\.\/\.\.\/components\/PalitraScreenCascade\.astro"/);
@@ -497,19 +498,19 @@ test("palitra screen cascade has six approved static screens and an isolated pre
   assert.match(css, /\.palitra-cascade-screen\s*\{[^}]*border-radius:\s*8px[^}]*box-shadow:/s);
   assert.match(css, /\.palitra-cascade-copy\s*\{[^}]*clamp\(32px,\s*3\.5vw,\s*54px\)/s);
   assert.match(css, /\.palitra-cascade-copy-accent\s*\{[^}]*color:\s*var\(--violet\)/s);
-  const cascadeScreenTransition = [...css.matchAll(/\[data-palitra-cascade\]\[data-cascade-ready="true"\]\s+\.palitra-cascade-screen\s*\{([^}]*)\}/g)]
+  const cascadeScreenTransition = [...css.matchAll(/\[data-palitra-cascade\]\[data-cascade-ready="true"\]\s+\.palitra-cascade-trigger\s*\{([^}]*)\}/g)]
     .map((match) => match[1])
     .find((rule) => rule.includes("transition:")) ?? "";
   assert.match(cascadeScreenTransition, /transition:\s*box-shadow\s+260ms\s+ease/);
   assert.doesNotMatch(cascadeScreenTransition, /transition:[^;}]*transform/);
-  assert.match(css, /\.palitra-cascade-screen-overlay\s*\{[^}]*display:\s*none/s);
-  assert.match(css, /\.palitra-cascade-screen-overlay\s*\{[^}]*pointer-events:\s*none[^}]*transform:\s*translate\(-50%,\s*-50%\)\s*scale\(\.94\)/s);
-  assert.match(css, /\.palitra-cascade-screen:is\(:hover,\s*:focus-visible\)\s*\{[^}]*opacity:\s*0/s);
-  assert.match(css, /\.palitra-cascade-screen:focus-visible\s*\{[^}]*outline:\s*none/s);
-  assert.match(css, /\.palitra-cascade-screen-overlay\s*\{[^}]*transition:\s*opacity\s+260ms\s+ease,\s*transform\s+260ms\s+ease,\s*visibility\s+0s\s+linear\s+260ms/s);
-  assert.match(css, /\.palitra-cascade-screen:is\(:hover,\s*:focus-visible\)\s*\+\s*\.palitra-cascade-screen-overlay\s*\{[^}]*z-index:\s*8[^}]*opacity:\s*1[^}]*transform:\s*translate\(-50%,\s*-50%\)\s*scale\(1\)/s);
-  assert.match(css, /\.palitra-cascade-screen:is\(:hover,\s*:focus-visible\)\s*\+\s*\.palitra-cascade-screen-overlay\s*\{[^}]*transition-delay:\s*0s/s);
-  assert.match(css, /\.palitra-cascade-screen:focus-visible\s*\+\s*\.palitra-cascade-screen-overlay\s*\{[^}]*outline:\s*2px\s+solid\s+var\(--violet\)[^}]*outline-offset:\s*6px/s);
+  assert.doesNotMatch(css, /\.palitra-cascade-screen:is\(:hover,\s*:focus-visible\)\s*\+/);
+  assert.match(css, /\.palitra-cascade-trigger\s*\{[^}]*cursor:\s*pointer/s);
+  assert.match(css, /\.palitra-lightbox\s*\{[^}]*position:\s*fixed[^}]*inset:\s*0[^}]*z-index:\s*100/s);
+  assert.match(css, /html\[data-lightbox-open="true"\]\s*\{[^}]*overflow:\s*hidden/s);
+  assert.match(script, /data-cascade-lightbox-trigger/);
+  assert.match(script, /event\.key === "Escape"/);
+  assert.match(script, /event\.target === lightbox/);
+  assert.match(script, /activeTrigger\?\.focus\(\)/);
   assert.match(css, /@media \(max-width:\s*640px\)[\s\S]*\.palitra-cascade-row\s*\{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
   assert.match(css, /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*\.palitra-cascade-screens\s*\{[^}]*display:\s*grid/s);
   assert.match(script, /const cascadeFinalScale = 0\.2;/);
