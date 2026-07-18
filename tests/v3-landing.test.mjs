@@ -59,6 +59,7 @@ test("v3 contains the approved section order and hero contract", async () => {
     "cohorts",
     "economics",
     "palitra",
+    "palitra-chat",
     "cases",
     "lead",
   ];
@@ -393,6 +394,135 @@ test("palitra uses the official logo and has a standalone preview", async () => 
   assert.match(preview, /import Palitra from "\.\.\/\.\.\/components\/Palitra\.astro"/);
   assert.match(preview, /<Palitra\s*\/>/);
   assert.doesNotMatch(preview, /SiteHeader|Economics|Cases|SiteFooter/);
+});
+
+test("palitra chat presents the approved screenshot in a standalone light section", async () => {
+  const componentPath = path.join(
+    v3Root,
+    "src",
+    "components",
+    "PalitraChat.astro",
+  );
+  const component = await readFile(componentPath, "utf8");
+  const screenshot = await readFile(
+    path.join(v3Root, "src", "assets", "palitra", "chat.jpg"),
+  );
+  const indexPage = await readFile(
+    path.join(v3Root, "src", "pages", "index.astro"),
+    "utf8",
+  );
+  const css = await readFile(
+    path.join(v3Root, "src", "styles", "global.css"),
+    "utf8",
+  );
+  const previewPath = path.join(
+    v3Root,
+    "src",
+    "pages",
+    "preview",
+    "palitra-chat.astro",
+  );
+  const preview = await readFile(previewPath, "utf8");
+
+  assert.ok(screenshot.byteLength > 0, "Palitra chat screenshot should exist");
+  assert.match(component, /import \{ Image \} from "astro:assets"/);
+  assert.match(component, /import chatScreenshot from "\.\.\/assets\/palitra\/chat\.jpg"/);
+  assert.match(component, /<h2>Управление в привычном чате AI-агента<\/h2>/);
+  assert.match(component, /class="palitra-chat-screen"/);
+  assert.match(component, /src=\{chatScreenshot\}/);
+  assert.match(component, /alt="Интерфейс чата AI-агента Palitra"/);
+  assert.match(indexPage, /import PalitraChat from "\.\.\/components\/PalitraChat\.astro"/);
+  assert.match(
+    indexPage,
+    /id="palitra"[\s\S]*id="palitra-chat"[\s\S]*id="cases"/,
+  );
+  assert.match(preview, /import PalitraChat from "\.\.\/\.\.\/components\/PalitraChat\.astro"/);
+  assert.match(preview, /<PalitraChat\s*\/>/);
+  assert.doesNotMatch(preview, /SiteHeader|Palitra\s+from|Cases|SiteFooter/);
+  assert.match(
+    css,
+    /\.palitra-chat\s*\{[^}]*background:\s*var\(--white\)/s,
+  );
+  assert.match(
+    css,
+    /\.palitra-chat-screen\s*\{[^}]*width:\s*min\(100%,\s*1180px\)[^}]*border:\s*1px solid var\(--light-line\)[^}]*border-radius:\s*8px/s,
+  );
+  assert.doesNotMatch(component, /<button|<p|data-|script/i);
+});
+
+test("palitra screen cascade has six approved static screens and an isolated preview", async () => {
+  const componentPath = path.join(v3Root, "src", "components", "PalitraScreenCascade.astro");
+  const component = await readFile(componentPath, "utf8");
+  const script = await readFile(path.join(v3Root, "src", "scripts", "site.ts"), "utf8");
+  const css = await readFile(path.join(v3Root, "src", "styles", "global.css"), "utf8");
+  const indexPage = await readFile(path.join(v3Root, "src", "pages", "index.astro"), "utf8");
+  const previewPath = path.join(v3Root, "src", "pages", "preview", "palitra-screen-cascade.astro");
+  const preview = await readFile(previewPath, "utf8");
+  const sourceNames = ["chat.jpg", "ai-optimization.png", "llm-reporting.png", "content-generation.png", "mediaplans.png", "pipelines.png"];
+
+  for (const sourceName of sourceNames) {
+    const source = await readFile(path.join(v3Root, "src", "assets", "palitra", sourceName));
+    assert.ok(source.byteLength > 0, `${sourceName} should exist`);
+  }
+  const cascadeAssetImports = [...component.matchAll(/import\s+\w+\s+from\s+"\.\.\/assets\/palitra\/([^"]+)";/g)].map((match) => match[1]);
+  assert.deepEqual([...cascadeAssetImports].sort(), [...sourceNames].sort());
+  assert.equal(new Set(cascadeAssetImports).size, 6);
+  assert.doesNotMatch(component, /common\.png/);
+  assert.match(component, /data-palitra-cascade/);
+  assert.match(component, /data-palitra-cascade-stage/);
+  assert.match(component, /data-palitra-cascade-copy/);
+  assert.match(component, /class="palitra-cascade-screens"/);
+  assert.equal((component.match(/class="palitra-cascade-screen"(?=\s)/g) ?? []).length, 2);
+  assert.match(component, /screens\.slice\(0,\s*3\)\.map/);
+  assert.match(component, /screens\.slice\(3\)\.map/);
+  assert.match(component, /доступен 24\/7 и знает всё о вашей рекламе и нашей работе над ней/);
+  assert.match(component, /<span class="palitra-cascade-copy-accent">\s*AI-директор по маркетингу\s*<\/span>/);
+  assert.match(component, /class="palitra-cascade-screen"[^>]*tabindex="0"/);
+  assert.equal((component.match(/class="palitra-cascade-screen-overlay"(?=\s)/g) ?? []).length, 2);
+  assert.match(component, /data-cascade-screen-overlay=\{screen\.key\}/);
+  assert.match(component, /class="palitra-cascade-screen-overlay"[^>]*aria-hidden="true"/);
+  assert.match(indexPage, /import PalitraScreenCascade from "\.\.\/components\/PalitraScreenCascade\.astro"/);
+  assert.match(indexPage, /id="palitra-chat"[\s\S]*id="palitra-screen-cascade"[\s\S]*id="cases"/);
+  assert.match(preview, /import PalitraScreenCascade from "\.\.\/\.\.\/components\/PalitraScreenCascade\.astro"/);
+  assert.match(preview, /<PalitraScreenCascade\s*\/>/);
+  assert.doesNotMatch(preview, /SiteHeader|PalitraChat|Cases|SiteFooter/);
+  assert.match(script, /\[data-palitra-cascade\]/);
+  assert.match(script, /data-cascade-ready/);
+  assert.match(script, /requestAnimationFrame/);
+  assert.match(script, /passive:\s*true/);
+  assert.match(script, /prefers-reduced-motion:\s*reduce/);
+  assert.match(css, /\.palitra-screen-cascade\s*\{[^}]*background:\s*var\(--white\)/s);
+  assert.match(css, /\[data-cascade-ready="true"\]\s+\.palitra-cascade-stage\s*\{[^}]*position:\s*sticky/s);
+  assert.match(css, /\[data-palitra-cascade\]\[data-cascade-ready="true"\]\s+\.palitra-cascade-stage/);
+  assert.match(css, /\.palitra-cascade-screen\s*\{[^}]*border-radius:\s*8px[^}]*box-shadow:/s);
+  assert.match(css, /\.palitra-cascade-copy\s*\{[^}]*clamp\(32px,\s*3\.5vw,\s*54px\)/s);
+  assert.match(css, /\.palitra-cascade-copy-accent\s*\{[^}]*color:\s*var\(--violet\)/s);
+  const cascadeScreenTransition = [...css.matchAll(/\[data-palitra-cascade\]\[data-cascade-ready="true"\]\s+\.palitra-cascade-screen\s*\{([^}]*)\}/g)]
+    .map((match) => match[1])
+    .find((rule) => rule.includes("transition:")) ?? "";
+  assert.match(cascadeScreenTransition, /transition:\s*box-shadow\s+260ms\s+ease/);
+  assert.doesNotMatch(cascadeScreenTransition, /transition:[^;}]*transform/);
+  assert.match(css, /\.palitra-cascade-screen-overlay\s*\{[^}]*display:\s*none/s);
+  assert.match(css, /\.palitra-cascade-screen-overlay\s*\{[^}]*pointer-events:\s*none[^}]*transform:\s*translate\(-50%,\s*-50%\)\s*scale\(\.94\)/s);
+  assert.match(css, /\.palitra-cascade-screen:is\(:hover,\s*:focus-visible\)\s*\{[^}]*opacity:\s*0/s);
+  assert.match(css, /\.palitra-cascade-screen:focus-visible\s*\{[^}]*outline:\s*none/s);
+  assert.match(css, /\.palitra-cascade-screen-overlay\s*\{[^}]*transition:\s*opacity\s+260ms\s+ease,\s*transform\s+260ms\s+ease,\s*visibility\s+0s\s+linear\s+260ms/s);
+  assert.match(css, /\.palitra-cascade-screen:is\(:hover,\s*:focus-visible\)\s*\+\s*\.palitra-cascade-screen-overlay\s*\{[^}]*z-index:\s*8[^}]*opacity:\s*1[^}]*transform:\s*translate\(-50%,\s*-50%\)\s*scale\(1\)/s);
+  assert.match(css, /\.palitra-cascade-screen:is\(:hover,\s*:focus-visible\)\s*\+\s*\.palitra-cascade-screen-overlay\s*\{[^}]*transition-delay:\s*0s/s);
+  assert.match(css, /\.palitra-cascade-screen:focus-visible\s*\+\s*\.palitra-cascade-screen-overlay\s*\{[^}]*outline:\s*2px\s+solid\s+var\(--violet\)[^}]*outline-offset:\s*6px/s);
+  assert.match(css, /@media \(max-width:\s*640px\)[\s\S]*\.palitra-cascade-row\s*\{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
+  assert.match(css, /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*\.palitra-cascade-screens\s*\{[^}]*display:\s*grid/s);
+  assert.match(script, /const cascadeFinalScale = 0\.2;/);
+  assert.match(script, /const cascadeEdgeGap = 16;/);
+  assert.match(script, /const screensCanvas = scene\.querySelector<HTMLElement>\("\.palitra-cascade-screens"\);/);
+  assert.match(script, /const copyHalfWidth = copy\.clientWidth \/ 2;/);
+  assert.match(script, /const canvasHalfWidth = screensCanvas\.clientWidth \/ 2;/);
+  assert.match(script, /const finalX = horizontalDirection \* Math\.min\(copyHalfWidth \+ screenHalfWidth \+ cascadeEdgeGap, canvasHalfWidth - screenHalfWidth\);/);
+  assert.match(script, /const finalY = verticalDirection \* Math\.min\(copyHalfHeight \+ screenHalfHeight \+ cascadeEdgeGap, canvasHalfHeight - screenHalfHeight\);/);
+  assert.match(css, /\[data-palitra-cascade\]\[data-cascade-ready="true"\] \.palitra-cascade-stage\s*\{[^}]*width:\s*100vw[^}]*margin-left:\s*calc\(50% - 50vw\)/s);
+  assert.doesNotMatch(css, /\.palitra-screen-cascade\s*\{[^}]*min-height:\s*280svh/s);
+  assert.doesNotMatch(css, /\.palitra-cascade-shell\s*\{[^}]*min-height:/s);
+  assert.match(css, /\[data-palitra-cascade\]\[data-cascade-ready="true"\]\s*\{[^}]*min-height:\s*280svh/s);
 });
 
 test("cases preserve v2 content and use two local optimized images", async () => {

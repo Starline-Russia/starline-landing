@@ -52,3 +52,63 @@ leadForm?.addEventListener("submit", (event) => {
   if (formStatus) formStatus.textContent = "Спасибо! Это локальный прототип. Данные никуда не отправлены.";
   leadForm.reset();
 });
+
+const cascadeMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+const cascadeDesktopQuery = window.matchMedia("(min-width: 641px)");
+const cascadeScenes = Array.from(document.querySelectorAll<HTMLElement>("[data-palitra-cascade]"));
+const cascadeFinalScale = 0.2;
+const cascadeEdgeGap = 16;
+
+for (const scene of cascadeScenes) {
+  const stage = scene.querySelector<HTMLElement>("[data-palitra-cascade-stage]");
+  const copy = scene.querySelector<HTMLElement>("[data-palitra-cascade-copy]");
+  const screensCanvas = scene.querySelector<HTMLElement>(".palitra-cascade-screens");
+  const screens = Array.from(scene.querySelectorAll<HTMLElement>("[data-cascade-screen]"));
+  let frame = 0;
+
+  const render = () => {
+    frame = 0;
+    const enabled = !cascadeMotionQuery.matches && cascadeDesktopQuery.matches;
+    if (!stage || !copy || !screensCanvas || !enabled) {
+      scene.removeAttribute("data-cascade-ready");
+      return;
+    }
+
+    scene.dataset.cascadeReady = "true";
+    const bounds = scene.getBoundingClientRect();
+    const travel = Math.max(scene.offsetHeight - window.innerHeight, 1);
+    const progress = Math.min(1, Math.max(0, -bounds.top / travel));
+    const copyHalfWidth = copy.clientWidth / 2;
+    const copyHalfHeight = copy.clientHeight / 2;
+    const canvasHalfWidth = screensCanvas.clientWidth / 2;
+    const canvasHalfHeight = screensCanvas.clientHeight / 2;
+
+    screens.forEach((screen, index) => {
+      const delay = index * 0.055;
+      const local = Math.min(1, Math.max(0, (progress - delay) / (1 - delay)));
+      const screenHalfWidth = screen.clientWidth * cascadeFinalScale / 2;
+      const screenHalfHeight = screen.clientHeight * cascadeFinalScale / 2;
+      const horizontalDirection = Math.sign(Number(screen.dataset.cascadeX ?? 0));
+      const verticalDirection = Math.sign(Number(screen.dataset.cascadeY ?? 0));
+      const finalX = horizontalDirection * Math.min(copyHalfWidth + screenHalfWidth + cascadeEdgeGap, canvasHalfWidth - screenHalfWidth);
+      const finalY = verticalDirection * Math.min(copyHalfHeight + screenHalfHeight + cascadeEdgeGap, canvasHalfHeight - screenHalfHeight);
+      const x = finalX * local;
+      const y = finalY * local;
+      const scale = 1 - local * (1 - cascadeFinalScale);
+      screen.style.setProperty("--cascade-x", `${x}px`);
+      screen.style.setProperty("--cascade-y", `${y}px`);
+      screen.style.setProperty("--cascade-scale", String(scale));
+    });
+    copy.style.setProperty("--cascade-copy-opacity", String(Math.min(1, Math.max(0, (progress - 0.34) / 0.42))));
+  };
+
+  const schedule = () => {
+    if (!frame) frame = window.requestAnimationFrame(render);
+  };
+
+  window.addEventListener("scroll", schedule, { passive: true });
+  window.addEventListener("resize", schedule, { passive: true });
+  cascadeMotionQuery.addEventListener("change", schedule);
+  cascadeDesktopQuery.addEventListener("change", schedule);
+  schedule();
+}

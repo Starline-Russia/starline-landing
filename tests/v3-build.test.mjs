@@ -25,6 +25,8 @@ test("v3 production HTML preserves the landing contract", async () => {
     "cohorts",
     "economics",
     "palitra",
+    "palitra-chat",
+    "palitra-screen-cascade",
     "cases",
     "lead",
   ]);
@@ -58,6 +60,37 @@ test("v3 production HTML preserves the landing contract", async () => {
   assert.doesNotMatch(html, /Одобрение специалистом \(HEETL\)/);
   assert.doesNotMatch(html, /Senior-специалист контролирует AI-процессы/);
   assert.doesNotMatch(html, /palitra-orbit|orbit-horizontal|orbit-vertical/);
+  assert.match(html, /Управление в привычном чате AI-агента/);
+  const palitraChatImages = [
+    ...html.matchAll(/<img\b[^>]*class="palitra-chat-screen"[^>]*>/g),
+  ].map((match) => match[0]);
+  assert.equal(palitraChatImages.length, 1);
+  assert.match(palitraChatImages[0], /\bwidth="1280"/);
+  assert.match(palitraChatImages[0], /\bheight="916"/);
+  assert.match(
+    palitraChatImages[0],
+    /\balt="Интерфейс чата AI-агента Palitra"/,
+  );
+  assert.match(palitraChatImages[0], /\bloading="lazy"/);
+  assert.match(html, /доступен 24\/7 и знает всё о вашей рекламе и нашей работе над ней/);
+  assert.match(html, /<span class="palitra-cascade-copy-accent">AI-директор по маркетингу<\/span>/);
+  const cascadeImages = [...html.matchAll(/<img\b[^>]*class="palitra-cascade-screen"[^>]*>/g)].map((match) => match[0]);
+  assert.equal(cascadeImages.length, 6);
+  assert.equal(cascadeImages.filter((image) => /\btabindex="0"/.test(image)).length, 6);
+  const cascadeOverlays = [...html.matchAll(/<img\b[^>]*class="palitra-cascade-screen-overlay"[^>]*>/g)].map((match) => match[0]);
+  assert.equal(cascadeOverlays.length, 6);
+  assert.ok(cascadeOverlays.every((image) => /\baria-hidden="true"/.test(image)));
+  assert.ok(cascadeOverlays.every((image) => /\balt(?:=""|\s)/.test(image)));
+  const cascadeSources = cascadeImages.map((image) => image.match(/\bsrc="([^"]+)"/)?.[1]);
+  assert.ok(cascadeSources.every(Boolean));
+  assert.equal(new Set(cascadeSources).size, 6);
+  assert.doesNotMatch(html, /common\.png/);
+  for (const image of cascadeImages) {
+    assert.match(image, /\bwidth="\d+"/);
+    assert.match(image, /\bheight="\d+"/);
+    assert.match(image, /\balt="[А-Яа-яЁё][^"]+"/);
+    assert.match(image, /\bloading="lazy"/);
+  }
 });
 
 test("v3 production cases include intrinsic image metadata and Russian alt text", async () => {
