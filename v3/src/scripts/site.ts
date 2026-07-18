@@ -1,4 +1,4 @@
-import { setupPalitraLightbox } from "./palitra-lightbox.js";
+import { setupPalitraClickExpand } from "./palitra-click-expand.js";
 
 document.documentElement.classList.add("js");
 
@@ -116,10 +116,11 @@ for (const scene of cascadeScenes) {
 }
 
 for (const scene of cascadeScenes) {
-  setupPalitraLightbox(scene, {
+  setupPalitraClickExpand(scene, {
     documentElement: document.documentElement,
     eventTarget: document,
     motionQuery: cascadeMotionQuery,
+    viewport: window,
     requestAnimationFrame: window.requestAnimationFrame.bind(window),
     cancelAnimationFrame: window.cancelAnimationFrame.bind(window),
     setTimeout: window.setTimeout.bind(window),

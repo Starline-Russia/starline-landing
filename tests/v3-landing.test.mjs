@@ -420,8 +420,11 @@ test("palitra screen cascade has six approved static screens and an isolated pre
   const componentPath = path.join(v3Root, "src", "components", "PalitraScreenCascade.astro");
   const component = await readFile(componentPath, "utf8");
   const siteScript = await readFile(path.join(v3Root, "src", "scripts", "site.ts"), "utf8");
-  const lightboxScript = await readFile(path.join(v3Root, "src", "scripts", "palitra-lightbox.js"), "utf8");
-  const script = `${siteScript}\n${lightboxScript}`;
+  const expandScript = await readFile(
+    path.join(v3Root, "src", "scripts", "palitra-click-expand.js"),
+    "utf8",
+  );
+  const script = `${siteScript}\n${expandScript}`;
   const css = await readFile(path.join(v3Root, "src", "styles", "global.css"), "utf8");
   const indexPage = await readFile(path.join(v3Root, "src", "pages", "index.astro"), "utf8");
   const previewPath = path.join(v3Root, "src", "pages", "preview", "palitra-screen-cascade.astro");
@@ -440,11 +443,11 @@ test("palitra screen cascade has six approved static screens and an isolated pre
   assert.match(component, /data-palitra-cascade-stage/);
   assert.match(component, /data-palitra-cascade-copy/);
   assert.match(component, /class="palitra-cascade-screens"/);
-  assert.equal((component.match(/data-cascade-lightbox-trigger/g) ?? []).length, 2);
+  assert.equal((component.match(/data-cascade-expand-trigger/g) ?? []).length, 2);
   assert.match(component, /<button[^>]*class="palitra-cascade-trigger"[^>]*type="button"[^>]*data-cascade-screen=/s);
-  assert.match(component, /data-cascade-lightbox[^>]*role="dialog"[^>]*aria-modal="true"/s);
-  assert.match(component, /data-cascade-lightbox-image/);
-  assert.match(component, /data-cascade-lightbox-close/);
+  assert.match(component, /data-cascade-expand-layer[^>]*role="dialog"[^>]*aria-modal="true"/s);
+  assert.match(component, /data-cascade-expand-image/);
+  assert.doesNotMatch(component, /data-cascade-lightbox|palitra-lightbox/);
   assert.doesNotMatch(component, /palitra-cascade-screen-overlay/);
   assert.match(component, /screens\.slice\(0,\s*3\)\.map/);
   assert.match(component, /screens\.slice\(3\)\.map/);
@@ -471,12 +474,15 @@ test("palitra screen cascade has six approved static screens and an isolated pre
   assert.doesNotMatch(css, /\.palitra-cascade-trigger\s*\{[^}]*transition:[^;}]*box-shadow/s);
   assert.doesNotMatch(css, /\.palitra-cascade-screen:is\(:hover,\s*:focus-visible\)\s*\+/);
   assert.match(css, /\.palitra-cascade-trigger\s*\{[^}]*cursor:\s*pointer/s);
-  assert.match(css, /\.palitra-lightbox\s*\{[^}]*position:\s*fixed[^}]*inset:\s*0[^}]*z-index:\s*100/s);
-  assert.match(css, /html\[data-lightbox-open="true"\]\s*\{[^}]*overflow:\s*hidden/s);
-  assert.match(script, /data-cascade-lightbox-trigger/);
+  assert.match(css, /\.palitra-expand-layer\s*\{[^}]*position:\s*fixed[^}]*background:\s*var\(--white\)/s);
+  assert.match(css, /\.palitra-expand-image\s*\{[^}]*max-width:\s*1180px/s);
+  assert.match(css, /html\[data-cascade-expanded="true"\]\s*\{[^}]*overflow:\s*hidden/s);
+  assert.match(script, /getBoundingClientRect/);
+  assert.match(script, /data-cascade-expand-trigger/);
   assert.match(script, /event\.key === "Escape"/);
-  assert.match(script, /event\.target === lightbox/);
+  assert.match(script, /event\.target === expandLayer/);
   assert.match(script, /activeTrigger\?\.focus\(\)/);
+  assert.doesNotMatch(css, /rgba\(8,\s*8,\s*23,\s*0\.86\)/);
   assert.match(css, /@media \(max-width:\s*640px\)[\s\S]*\.palitra-cascade-row\s*\{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
   assert.match(css, /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*\.palitra-cascade-screens\s*\{[^}]*display:\s*grid/s);
   assert.match(script, /const cascadeFinalScale = 0\.2;/);

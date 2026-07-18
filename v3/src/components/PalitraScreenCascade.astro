@@ -32,7 +32,7 @@ const screens = [
             data-cascade-index={index}
             data-cascade-x={screen.x}
             data-cascade-y={screen.y}
-            data-cascade-lightbox-trigger
+            data-cascade-expand-trigger
             aria-label={`Открыть ${screen.alt.toLowerCase()}`}
           >
             <Image class="palitra-cascade-screen" src={screen.src} alt={screen.alt} loading="lazy" />
@@ -51,7 +51,7 @@ const screens = [
             data-cascade-index={index + 3}
             data-cascade-x={screen.x}
             data-cascade-y={screen.y}
-            data-cascade-lightbox-trigger
+            data-cascade-expand-trigger
             aria-label={`Открыть ${screen.alt.toLowerCase()}`}
           >
             <Image class="palitra-cascade-screen" src={screen.src} alt={screen.alt} loading="lazy" />
@@ -60,10 +60,20 @@ const screens = [
       </div>
     </div>
   </div>
-  <div class="palitra-lightbox" data-cascade-lightbox role="dialog" aria-modal="true" aria-label="Просмотр скриншота Palitra" hidden>
-    <button class="palitra-lightbox-close" type="button" data-cascade-lightbox-close aria-label="Закрыть просмотр">×</button>
-    <div class="palitra-lightbox-frame">
-      <img class="palitra-lightbox-image" data-cascade-lightbox-image src="" alt="" />
-    </div>
+  <div
+    class="palitra-expand-layer"
+    data-cascade-expand-layer
+    role="dialog"
+    aria-modal="true"
+    aria-label="Увеличенный скриншот Palitra"
+    hidden
+  >
+    <img
+      class="palitra-expand-image"
+      data-cascade-expand-image
+      src=""
+      alt=""
+      tabindex="0"
+    />
   </div>
 </div>
