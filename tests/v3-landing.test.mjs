@@ -35,13 +35,43 @@ test("v3 is an isolated Astro 7 project", async () => {
     path.join(v3Root, "astro.config.mjs"),
     "utf8",
   );
+  const pagesWorkflow = await readFile(
+    path.join(root, ".github", "workflows", "deploy-v3-pages.yml"),
+    "utf8",
+  );
 
   assert.equal(packageJson.dependencies.astro, "7.0.9");
   assert.match(packageJson.scripts.check, /astro check/);
   assert.match(packageJson.scripts.build, /astro build/);
+  assert.equal(
+    packageJson.scripts["build:pages"],
+    "npm test && npm run check && npm run build && npm run test:build",
+  );
   assert.match(packageJson.scripts.test, /node --test/);
   assert.equal(packageJson.scripts["test:build"], "node --test ../tests/v3-build.test.mjs");
   assert.match(astroConfig, /output:\s*["']static["']/);
+  assert.match(astroConfig, /process\.env\.DEPLOY_TARGET === "github-pages"/);
+  assert.match(astroConfig, /site:\s*isGitHubPages \? "https:\/\/yuriypapenov\.github\.io"/);
+  assert.match(astroConfig, /base:\s*isGitHubPages \? "\/Workshop"/);
+  assert.match(pagesWorkflow, /branches:\s*\[v3\]/);
+  assert.match(pagesWorkflow, /DEPLOY_TARGET:\s*github-pages/);
+  assert.match(pagesWorkflow, /uses:\s*withastro\/action@v6/);
+  assert.match(pagesWorkflow, /path:\s*v3/);
+  assert.match(pagesWorkflow, /build-cmd:\s*npm run build:pages/);
+  assert.match(pagesWorkflow, /uses:\s*actions\/deploy-pages@v5/);
+});
+
+test("public assets follow Astro BASE_URL for subpath deployments", async () => {
+  const markup = await sourceBundle(".astro");
+  const css = await readFile(
+    path.join(v3Root, "src", "styles", "global.css"),
+    "utf8",
+  );
+
+  assert.match(markup, /const assetBase = `\$\{import\.meta\.env\.BASE_URL\.replace\(\/\\\/\$\/, ""\)\}\/`/);
+  assert.doesNotMatch(markup, /src="\/assets\//);
+  assert.doesNotMatch(css, /url\(["']\/assets\//);
+  assert.match(css, /url\(["']\.\.\/assets\/starline-logo-v8-1\.png["']\)/);
 });
 
 test("v3 contains the approved section order and hero contract", async () => {
@@ -341,7 +371,7 @@ test("palitra uses the official logo and has a standalone preview", async () => 
 
   assert.ok(logo.byteLength > 0, "official Palitra logo should exist");
   assert.match(component, /class="palitra-logo"/);
-  assert.match(component, /src="\/assets\/palitra-logo-512\.png"/);
+  assert.match(component, /src=\{`\$\{assetBase\}assets\/palitra-logo-512\.png`\}/);
   assert.match(component, /width="512"/);
   assert.match(component, /height="512"/);
   assert.doesNotMatch(component, /class="star"|<strong>Palitra<\/strong>/);
@@ -356,7 +386,7 @@ test("palitra uses the official logo and has a standalone preview", async () => 
     /Palitra ускоряет анализ, отчётность и распределение бюджетов — решения остаются под контролем специалиста<\/p>/,
   );
   assert.match(component, /class="palitra-area-bullet"/);
-  assert.match(component, /src="\/assets\/starline-logo-v8-1\.png"/);
+  assert.match(component, /src=\{`\$\{assetBase\}assets\/starline-logo-v8-1\.png`\}/);
   assert.match(component, /width="1024"/);
   assert.match(component, /height="1024"/);
   assert.doesNotMatch(component, /padStart|palitra-orbit|orbit-horizontal|orbit-vertical/);
@@ -503,20 +533,61 @@ test("palitra screen cascade has six approved static screens and an isolated pre
   assert.match(css, /\[data-palitra-cascade\]\[data-cascade-ready="true"\]\s*\{[^}]*min-height:\s*300svh/s);
 });
 
-test("cases preserve v2 content and use two local optimized images", async () => {
+test("cases has a standalone component preview", async () => {
+  const previewPath = path.join(v3Root, "src", "pages", "preview", "cases.astro");
+  const pageFiles = await collectFiles(path.join(v3Root, "src", "pages"), ".astro");
+
+  assert.ok(pageFiles.includes(previewPath), "standalone Cases preview should exist");
+
+  const preview = await readFile(previewPath, "utf8");
+  assert.match(preview, /import Cases from "\.\.\/\.\.\/components\/Cases\.astro"/);
+  assert.match(preview, /<Cases\s*\/>/);
+  assert.match(preview, /<section class="scene cases">/);
+  assert.doesNotMatch(preview, /SiteHeader|Palitra|Lead|SiteFooter/);
+});
+
+test("cases preserve approved content and use three local photographs", async () => {
   const markup = await sourceBundle(".astro");
   const data = await readFile(path.join(v3Root, "src", "data", "site.ts"), "utf8");
+  const component = await readFile(path.join(v3Root, "src", "components", "Cases.astro"), "utf8");
+  const imports = data.split("export interface TaskItem")[0];
   const caseData = data.split("export const cases")[1];
 
   assert.match(markup, /cases\.map/);
-  assert.equal((caseData.match(/imageAlt:/g) ?? []).length, 2);
-  assert.equal((caseData.match(/width:\s*1448/g) ?? []).length, 2);
-  assert.equal((caseData.match(/height:\s*1086/g) ?? []).length, 2);
+  assert.match(component, /<div class="section-heading shell">/);
+  assert.match(component, /<h2>Кейсы нашей команды<\/h2>/);
+  assert.doesNotMatch(component, /section-lead/);
+  assert.match(imports, /import fintechImage from "\.\.\/assets\/cases\/fintech\.jpg"/);
+  assert.match(imports, /import realEstateImage from "\.\.\/assets\/cases\/real-estate\.png"/);
+  assert.match(imports, /import toysImage from "\.\.\/assets\/cases\/toys\.jpg"/);
+  assert.equal((caseData.match(/imageAlt:/g) ?? []).length, 3);
+  assert.match(caseData, /imageAlt: "Специалист анализирует финансовые графики на нескольких экранах"/);
+  assert.match(caseData, /imageAlt: "Современные высотные здания Москва-Сити на берегу Москвы-реки"/);
+  assert.match(caseData, /imageAlt: "Детские игрушки на полках магазина"/);
+  assert.match(caseData, /width:\s*6016[\s\S]*height:\s*4016/);
+  assert.match(caseData, /width:\s*1242[\s\S]*height:\s*900/);
+  assert.match(caseData, /width:\s*2560[\s\S]*height:\s*1703/);
   assert.match(caseData, /5–10×/);
   assert.match(caseData, /15 тестов за 2 месяца/);
   assert.match(caseData, /\+30%/);
+  assert.match(caseData, /category: "E-commerce"/);
+  assert.match(caseData, /title: "Интернет-магазин детских товаров"/);
+  assert.match(caseData, /metric: "\+27%"/);
+  assert.match(caseData, /metricLabel: "рост CAGR в 2026 году"/);
+  assert.match(caseData, /С Q4 2025 перестроили рекламные кампании на привлечение новых клиентов/);
+  assert.match(caseData, /Пессимизировали ретаргетинг/);
+  assert.match(caseData, /Сфокусировались на росте GMV всего бизнеса, а не отдельного направления/);
+  assert.match(caseData, /Впервые за последние 5 лет e-com направление выросло одновременно с общим GMV бизнеса\./);
   assert.match(markup, /alt=\{caseStudy\.imageAlt\}/);
   assert.doesNotMatch(markup, /Детский мир|Перекр[её]сток/);
+});
+
+test("case actions use small Starline marks at desktop scale", async () => {
+  const css = await readFile(path.join(v3Root, "src", "styles", "global.css"), "utf8");
+
+  assert.match(css, /\.case-body ul\s*\{[^}]*list-style:\s*none/s);
+  assert.match(css, /\.case-body li\s*\{[^}]*position:\s*relative[^}]*font-size:\s*20px/s);
+  assert.match(css, /\.case-body li::before\s*\{[^}]*background:\s*url\("\.\.\/assets\/starline-logo-v8-1\.png"\)/s);
 });
 
 test("local interactions cover menu, services, and lead form", async () => {
@@ -559,7 +630,7 @@ test("economics explains GMV growth with an explicit non-guarantee caveat", asyn
   assert.match(economics, /\+20–50% GMV за 6–12 месяцев/);
   assert.match(economics, /не является гарантией/);
   assert.equal(
-    (economics.match(/src="\/assets\/starline-logo-v8-1\.png"/g) ?? []).length,
+    (economics.match(/src=\{`\$\{assetBase\}assets\/starline-logo-v8-1\.png`\}/g) ?? []).length,
     3,
     "each economics step should use the approved Starline logo asset instead of a numeric index",
   );
@@ -587,7 +658,7 @@ test("economics explains GMV growth with an explicit non-guarantee caveat", asyn
   assert.match(css, /\.economics-flow\s*\{[^}]*border-top:/s);
   assert.match(css, /\.economics-step\s*\{[^}]*border-bottom:/s);
   assert.match(css, /\.economics-bullet\s*\{[^}]*width:\s*24px/s);
-  assert.match(css, /\.star\s*\{[^}]*url\(["']?\/assets\/starline-logo-v8-1\.png["']?\)/s);
+  assert.match(css, /\.star\s*\{[^}]*url\(["']?\.\.\/assets\/starline-logo-v8-1\.png["']?\)/s);
   assert.doesNotMatch(css, /\.star\s*\{[^}]*clip-path:/s);
   assert.match(css, /@media \(max-width: 900px\)\s*\{[\s\S]*?\.economics-layout\s*\{[^}]*grid-template-columns:\s*1fr/s);
 });

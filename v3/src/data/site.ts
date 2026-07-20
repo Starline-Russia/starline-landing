@@ -1,6 +1,7 @@
 import type { ImageMetadata } from "astro";
-import fintechImage from "../assets/cases/fintech-growth.png";
-import realEstateImage from "../assets/cases/real-estate-growth.png";
+import fintechImage from "../assets/cases/fintech.jpg";
+import realEstateImage from "../assets/cases/real-estate.png";
+import toysImage from "../assets/cases/toys.jpg";
 
 export interface TaskItem {
   title: string;
@@ -138,9 +139,9 @@ export const cases: CaseStudy[] = [
     points: ["Применили когортный подход", "15 тестов за 2 месяца", "HADI-циклы как основа роста показателей"],
     quote: "Кейс привёл к пяти годам плотной эффективной работы.",
     image: fintechImage,
-    imageAlt: "Абстрактные потоки данных сходятся в устойчивую траекторию роста",
-    width: 1448,
-    height: 1086,
+    imageAlt: "Специалист анализирует финансовые графики на нескольких экранах",
+    width: 6016,
+    height: 4016,
   },
   {
     category: "Real estate",
@@ -150,8 +151,24 @@ export const cases: CaseStudy[] = [
     points: ["Связали маркетинг с бизнес-результатом", "Сфокусировались на работающих гипотезах"],
     quote: "Результат помог перезапустить маркетинг для серии объектов в новом сложном регионе.",
     image: realEstateImage,
-    imageAlt: "Абстрактный городской ландшафт с направленной траекторией роста",
-    width: 1448,
-    height: 1086,
+    imageAlt: "Современные высотные здания Москва-Сити на берегу Москвы-реки",
+    width: 1242,
+    height: 900,
+  },
+  {
+    category: "E-commerce",
+    title: "Интернет-магазин детских товаров",
+    metric: "+27%",
+    metricLabel: "рост CAGR в 2026 году",
+    points: [
+      "С Q4 2025 перестроили рекламные кампании на привлечение новых клиентов",
+      "Пессимизировали ретаргетинг",
+      "Сфокусировались на росте GMV всего бизнеса, а не отдельного направления",
+    ],
+    quote: "Впервые за последние 5 лет e-com направление выросло одновременно с общим GMV бизнеса.",
+    image: toysImage,
+    imageAlt: "Детские игрушки на полках магазина",
+    width: 2560,
+    height: 1703,
   },
 ];

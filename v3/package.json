@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
     "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "build:pages": "npm test && npm run check && npm run build && npm run test:build",
     "check": "ASTRO_TELEMETRY_DISABLED=1 astro check",
     "test": "node --test ../tests/v3-landing.test.mjs ../tests/palitra-click-expand.test.mjs",
     "test:build": "node --test ../tests/v3-build.test.mjs"

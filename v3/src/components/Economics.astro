@@ -1,3 +1,7 @@
+---
+const assetBase = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/`;
+---
+
 <div class="economics-layout shell">
   <div class="economics-heading">
     <div class="economics-heading-copy">
@@ -11,15 +15,15 @@
 
   <div class="economics-flow" aria-label="Логика роста GMV">
     <p class="economics-step">
-      <img class="economics-bullet" src="/assets/starline-logo-v8-1.png" alt="" aria-hidden="true" width="1024" height="1024" />
+      <img class="economics-bullet" src={`${assetBase}assets/starline-logo-v8-1.png`} alt="" aria-hidden="true" width="1024" height="1024" />
       <span>CPA вырастет</span>
     </p>
     <p class="economics-step">
-      <img class="economics-bullet" src="/assets/starline-logo-v8-1.png" alt="" aria-hidden="true" width="1024" height="1024" />
+      <img class="economics-bullet" src={`${assetBase}assets/starline-logo-v8-1.png`} alt="" aria-hidden="true" width="1024" height="1024" />
       <span>ДРР тоже вырастет</span>
     </p>
     <p class="economics-step">
-      <img class="economics-bullet" src="/assets/starline-logo-v8-1.png" alt="" aria-hidden="true" width="1024" height="1024" />
+      <img class="economics-bullet" src={`${assetBase}assets/starline-logo-v8-1.png`} alt="" aria-hidden="true" width="1024" height="1024" />
       <span>GMV вырастет ещё сильнее</span>
     </p>
   </div>

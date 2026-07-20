@@ -107,7 +107,7 @@ button:disabled, input:disabled { opacity: 0.55; cursor: not-allowed; }
 .hero-orbit { position: absolute; width: 82vw; aspect-ratio: 2.9; border: 1px solid rgba(197, 125, 251, 0.14); border-radius: 50%; pointer-events: none; }
 .hero-orbit-a { left: -19vw; bottom: 12vh; transform: rotate(-9deg); }
 .hero-orbit-b { right: -34vw; top: 17vh; transform: rotate(-14deg); }
-.star { display: block; width: 62px; aspect-ratio: 1; background: url("/assets/starline-logo-v8-1.png") center / contain no-repeat; }
+.star { display: block; width: 62px; aspect-ratio: 1; background: url("../assets/starline-logo-v8-1.png") center / contain no-repeat; }
 .hero-inner { position: relative; z-index: 2; display: flex; flex-direction: column; justify-content: flex-end; min-height: calc(100svh - 190px); }
 .hero-copy { margin: auto; padding-top: 70px; text-align: center; }
 .hero h1 { margin-bottom: 36px; font-size: clamp(54px, 6.2vw, 104px); font-weight: 600; line-height: 0.98; }
@@ -348,7 +348,9 @@ html[data-cascade-expanded="true"] {
 .case-body { display: grid; grid-template-columns: 0.8fr 1fr; gap: 35px; align-content: center; padding: 38px; border-left: 1px solid var(--light-line); }
 .case-metric strong { display: block; color: var(--purple); font-size: clamp(70px, 7vw, 108px); font-weight: 500; line-height: 0.9; }
 .case-metric span { display: block; max-width: 280px; margin-top: 18px; color: var(--muted); }
-.case-body ul { display: grid; gap: 10px; align-content: start; margin: 0; padding-left: 19px; }
+.case-body ul { display: grid; gap: 14px; align-content: start; margin: 0; padding: 0; list-style: none; }
+.case-body li { position: relative; padding-left: 28px; font-size: 20px; line-height: 1.4; }
+.case-body li::before { position: absolute; top: 0.35em; left: 0; width: 16px; height: 16px; content: ""; background: url("../assets/starline-logo-v8-1.png") center / contain no-repeat; }
 .case-body blockquote { grid-column: 1 / -1; margin: 0; padding-top: 22px; border-top: 1px solid var(--light-line); font: 500 20px/1.35 var(--display); }
 
 .lead { color: var(--white); background: linear-gradient(135deg, #3f09b1 12%, #7544d5 58%, #c57dfb 130%); }
@@ -473,6 +475,7 @@ html[data-cascade-expanded="true"] {
   .palitra-chat-screen { margin-top: 38px; }
   .case-list { margin-top: 50px; }
   .case-body { grid-template-columns: 1fr; padding: 28px 0; }
+  .case-body li { font-size: 18px; }
   .case-body blockquote { grid-column: auto; }
   .lead-layout { gap: 45px; }
   .button-light { width: 100%; }

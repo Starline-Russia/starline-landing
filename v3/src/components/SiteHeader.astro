@@ -1,6 +1,10 @@
+---
+const assetBase = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/`;
+---
+
 <header class="site-header" data-site-header>
   <a class="brand" href="#hero" aria-label="Starline — на главную">
-    <img src="/assets/starline-logo.png" alt="" width="44" height="44" />
+    <img src={`${assetBase}assets/starline-logo.png`} alt="" width="44" height="44" />
     <span>Starline</span>
   </a>
 

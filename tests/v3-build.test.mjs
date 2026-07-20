@@ -15,6 +15,10 @@ function count(markup, pattern) {
 test("v3 production HTML preserves the landing contract", async () => {
   const html = await read("v3/dist/index.html");
   const sectionIds = [...html.matchAll(/<section\b[^>]*\bid="([^"]+)"/g)].map((match) => match[1]);
+  const publicAssetPrefix =
+    process.env.DEPLOY_TARGET === "github-pages"
+      ? "/Workshop/assets/"
+      : "/assets/";
 
   assert.deepEqual(sectionIds, [
     "hero",
@@ -35,15 +39,21 @@ test("v3 production HTML preserves the landing contract", async () => {
   assert.equal(count(html, /class="[^"]*\bservice-item\b/g), 6);
   assert.equal(count(html, /class="[^"]*\bindustry-card\b/g), 8);
   assert.equal(count(html, /class="market-signal"/g), 2);
-  assert.equal(count(html, /class="[^"]*\bcase-study\b/g), 2);
+  assert.equal(count(html, /class="[^"]*\bcase-study\b/g), 3);
   assert.equal(count(html, /<input\b/g), 2);
   assert.doesNotMatch(html, /Как растет GMV|Как растёт GMV/);
   assert.match(html, /Реклама может выглядеть эффективной, пока бизнес почти не растёт/);
   assert.match(html, /не является гарантией результата/);
   assert.match(
     html,
-    /<img\b[^>]*class="palitra-logo"[^>]*src="\/assets\/palitra-logo-512\.png"[^>]*width="512"[^>]*height="512"[^>]*>/,
+    new RegExp(
+      `<img\\b[^>]*class="palitra-logo"[^>]*src="${publicAssetPrefix.replaceAll("/", "\\/")}palitra-logo-512\\.png"[^>]*width="512"[^>]*height="512"[^>]*>`,
+    ),
   );
+  if (process.env.DEPLOY_TARGET === "github-pages") {
+    assert.doesNotMatch(html, /\bsrc="\/assets\//);
+    assert.match(html, /\bsrc="\/Workshop\/_astro\//);
+  }
   assert.match(html, /Новый подход к performance/);
   assert.match(
     html,
@@ -90,7 +100,8 @@ test("v3 production cases include intrinsic image metadata and Russian alt text"
   const html = await read("v3/dist/index.html");
   const images = [...html.matchAll(/<img\b[^>]*class="case-image"[^>]*>/g)].map((match) => match[0]);
 
-  assert.equal(images.length, 2);
+  assert.equal(images.length, 3);
+  assert.doesNotMatch(html, /images\.pexels\.com|pexels\.com/);
   for (const image of images) {
     assert.match(image, /\bwidth="\d+"/);
     assert.match(image, /\bheight="\d+"/);
