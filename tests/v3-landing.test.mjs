@@ -51,8 +51,9 @@ test("v3 is an isolated Astro 7 project", async () => {
   assert.equal(packageJson.scripts["test:build"], "node --test ../tests/v3-build.test.mjs");
   assert.match(astroConfig, /output:\s*["']static["']/);
   assert.match(astroConfig, /process\.env\.DEPLOY_TARGET === "github-pages"/);
+  assert.match(astroConfig, /process\.env\.GITHUB_REPOSITORY/);
   assert.match(astroConfig, /site:\s*isGitHubPages \? "https:\/\/yuriypapenov\.github\.io"/);
-  assert.match(astroConfig, /base:\s*isGitHubPages \? "\/Workshop"/);
+  assert.match(astroConfig, /base:\s*isGitHubPages \? `\/\$\{repositoryName\}`/);
   assert.match(pagesWorkflow, /branches:\s*\[v3\]/);
   assert.match(pagesWorkflow, /DEPLOY_TARGET:\s*github-pages/);
   assert.match(pagesWorkflow, /uses:\s*withastro\/action@v6/);

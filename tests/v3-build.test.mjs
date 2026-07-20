@@ -15,9 +15,10 @@ function count(markup, pattern) {
 test("v3 production HTML preserves the landing contract", async () => {
   const html = await read("v3/dist/index.html");
   const sectionIds = [...html.matchAll(/<section\b[^>]*\bid="([^"]+)"/g)].map((match) => match[1]);
+  const repositoryName = process.env.GITHUB_REPOSITORY?.split("/").at(-1) ?? "Workshop";
   const publicAssetPrefix =
     process.env.DEPLOY_TARGET === "github-pages"
-      ? "/Workshop/assets/"
+      ? `/${repositoryName}/assets/`
       : "/assets/";
 
   assert.deepEqual(sectionIds, [
@@ -52,7 +53,7 @@ test("v3 production HTML preserves the landing contract", async () => {
   );
   if (process.env.DEPLOY_TARGET === "github-pages") {
     assert.doesNotMatch(html, /\bsrc="\/assets\//);
-    assert.match(html, /\bsrc="\/Workshop\/_astro\//);
+    assert.match(html, new RegExp(`\\bsrc="/${repositoryName}/_astro/`));
   }
   assert.match(html, /Новый подход к performance/);
   assert.match(
