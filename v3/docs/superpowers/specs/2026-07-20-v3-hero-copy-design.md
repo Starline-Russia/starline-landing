@@ -23,9 +23,11 @@ keeps the existing violet gradient emphasis. On mobile, both phrases retain
 their semantic separation but may wrap naturally within the available width.
 
 This is an intentional replacement of the previous approved Hero H1
-`Starline — оператор роста / для электронной коммерции`; update the v3 content
-contract and structural expectations to the new wording rather than preserving
-the old assertion.
+`Starline — оператор роста / для электронной коммерции`; update the working
+project's structural expectations to the new wording rather than preserving the
+old assertion. The installed `starline-landing-v3` skill contract remains out
+of scope because synchronizing the working project back into the skill requires
+a separate explicit request.
 
 ## Supporting message
 
@@ -61,4 +63,3 @@ the already tall mobile Hero unnecessarily longer.
 5. Confirm the desktop/tablet headline hierarchy, mobile wrapping, lack of
    horizontal overflow or clipped text, visible CTA focus, no console errors,
    and no missing assets.
-
