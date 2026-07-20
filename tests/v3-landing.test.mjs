@@ -102,8 +102,8 @@ test("v3 contains the approved section order and hero contract", async () => {
     previousIndex = sectionIndex;
   }
 
-  assert.match(markup, /Starline — оператор роста/);
-  assert.match(markup, /для электронной коммерции/);
+  assert.match(markup, /Управляем маркетингом/);
+  assert.match(markup, /как системой роста GMV/);
   assert.match(markup, /10\+/);
   assert.match(markup, /50\+/);
   assert.match(markup, />100\+</);
@@ -129,6 +129,24 @@ test("hero has isolated responsive styling and a standalone preview", async () =
   const pageFiles = await collectFiles(path.join(v3Root, "src", "pages"), ".astro");
 
   assert.doesNotMatch(hero, /star-small|class=\"star/);
+  assert.match(hero, /<span>Управляем маркетингом<\/span>/);
+  assert.match(hero, /<strong>как системой роста GMV<\/strong>/);
+  assert.match(
+    hero,
+    /Связываем привлечение новых клиентов, аналитику и каналы продаж с ростом GMV —\s*а не только с показателями в рекламных отчётах\s*<\/p>/s,
+  );
+  assert.doesNotMatch(
+    hero,
+    /показателями в рекламных отчётах\.\s*<\/p>/s,
+  );
+  assert.match(
+    css,
+    /\.hero-copy > p\s*\{[^}]*font-size:\s*22px/s,
+  );
+  assert.match(
+    css,
+    /@media \(max-width: 640px\)[\s\S]*?\.hero-copy > p\s*\{[^}]*font-size:\s*17px/s,
+  );
   assert.match(css, /\.hero-metrics dd\s*\{[^}]*font-size:\s*18px/s);
   assert.match(css, /\.hero h1\s*\{[^}]*margin-bottom:\s*36px/s);
   assert.match(css, /\.hero \.button-primary\s*\{[^}]*margin-top:\s*46px/s);
