@@ -459,8 +459,9 @@ test("palitra uses the official logo and has a standalone preview", async () => 
   assert.doesNotMatch(css, /\.palitra-area\s*\{[^}]*border-top:/s);
   assert.match(
     css,
-    /\.palitra-heading h2\s*\{[^}]*font-size:\s*clamp\(42px,\s*4vw,\s*64px\)/s,
+    /\.palitra-heading h2\s*\{[^}]*font-size:\s*clamp\(38px,\s*3\.2vw,\s*54px\)/s,
   );
+  assert.match(css, /\.palitra-heading > p:last-child\s*\{[^}]*font-size:\s*20px/s);
   assert.doesNotMatch(css, /\.palitra-orbit|\.orbit-horizontal|\.orbit-vertical/);
   assert.ok(pageFiles.includes(previewPath), "standalone Palitra preview should exist");
 
@@ -702,6 +703,10 @@ test("economics explains GMV growth with an explicit non-guarantee caveat", asyn
   assert.match(css, /\.economics-flow\s*\{[^}]*border-top:/s);
   assert.match(css, /\.economics-step\s*\{[^}]*border-bottom:/s);
   assert.match(css, /\.economics-bullet\s*\{[^}]*width:\s*24px/s);
+  assert.match(
+    css,
+    /\.economics-heading > p:last-child\s*\{[^}]*align-self:\s*center[^}]*margin-bottom:\s*0[^}]*font-size:\s*19px/s,
+  );
   assert.match(css, /\.star\s*\{[^}]*url\(["']?\.\.\/assets\/starline-logo-v8-1\.png["']?\)/s);
   assert.doesNotMatch(css, /\.star\s*\{[^}]*clip-path:/s);
   assert.match(css, /@media \(max-width: 900px\)\s*\{[\s\S]*?\.economics-layout\s*\{[^}]*grid-template-columns:\s*1fr/s);

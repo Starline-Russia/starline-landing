@@ -208,7 +208,7 @@ button:disabled, input:disabled { opacity: 0.55; cursor: not-allowed; }
 .economics-layout { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.9fr); gap: 60px; }
 .economics-heading { grid-column: 1 / -1; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 80px; align-items: end; }
 .economics-heading h2 { max-width: 980px; }
-.economics-heading > p:last-child { max-width: 520px; margin-bottom: 8px; color: var(--muted); font-size: 18px; }
+.economics-heading > p:last-child { align-self: center; max-width: 520px; margin-bottom: 0; color: var(--muted); font-size: 19px; }
 .economics-flow { align-self: start; border-top: 1px solid rgba(63, 9, 177, 0.2); }
 .economics-step { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 24px; align-items: center; margin: 0; padding: 30px 0; border-bottom: 1px solid rgba(63, 9, 177, 0.2); }
 .economics-bullet { width: 24px; height: 24px; align-self: center; object-fit: contain; }
@@ -235,8 +235,8 @@ button:disabled, input:disabled { opacity: 0.55; cursor: not-allowed; }
 .palitra { color: var(--white); background: linear-gradient(135deg, #16053d, #3f09b1 62%, #25065e); }
 .palitra-layout { position: relative; display: grid; grid-template-columns: 0.72fr 1.28fr; gap: 70px; }
 .palitra-heading { align-self: center; }
-.palitra-heading h2 { margin-bottom: 26px; font-size: clamp(42px, 4vw, 64px); font-weight: 500; line-height: 1.04; }
-.palitra-heading > p:last-child { max-width: 510px; color: rgba(255, 255, 255, 0.66); font-size: 18px; }
+.palitra-heading h2 { margin-bottom: 26px; font-size: clamp(38px, 3.2vw, 54px); font-weight: 500; line-height: 1.04; }
+.palitra-heading > p:last-child { max-width: 510px; color: rgba(255, 255, 255, 0.66); font-size: 20px; }
 .palitra-system { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 190px 170px; min-height: 620px; padding: 40px 28px 78px; border: 1px dashed rgba(255, 255, 255, 0.42); }
 .palitra-area { position: relative; z-index: 3; display: grid; grid-template-columns: 18px minmax(0, 1fr); column-gap: 10px; align-content: start; padding-top: 18px; }
 .palitra-area-bullet { width: 18px; height: 18px; margin-top: 5px; object-fit: contain; }
@@ -409,6 +409,7 @@ html[data-cascade-expanded="true"] {
   .market-problem-copy { max-width: 850px; }
   .market-signal-list { justify-self: end; width: 100%; max-width: 620px; }
   .economics-layout { grid-template-columns: 1fr; gap: 48px; }
+  .economics-heading > p:last-child { align-self: auto; }
   .process-grid { grid-template-columns: 1fr; }
   .process-grid::before { width: 5px; height: 66.66%; }
   .process-step, .process-step + .process-step { min-height: auto; padding: 30px 0 30px 30px; border-right: 0; border-bottom: 1px solid var(--light-line); }
