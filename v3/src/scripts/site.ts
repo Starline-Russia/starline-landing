@@ -60,6 +60,9 @@ const cascadeDesktopQuery = window.matchMedia("(min-width: 641px)");
 const cascadeScenes = Array.from(document.querySelectorAll<HTMLElement>("[data-palitra-cascade]"));
 const cascadeFinalScale = 0.2;
 const cascadeEdgeGap = 16;
+const cascadeSpreadEnd = 0.68;
+const cascadeCopyStart = 0.76;
+const cascadeCopyEnd = 0.94;
 
 for (const scene of cascadeScenes) {
   const stage = scene.querySelector<HTMLElement>("[data-palitra-cascade-stage]");
@@ -87,7 +90,7 @@ for (const scene of cascadeScenes) {
 
     screens.forEach((screen, index) => {
       const delay = index * 0.055;
-      const local = Math.min(1, Math.max(0, (progress - delay) / (1 - delay)));
+      const local = Math.min(1, Math.max(0, (progress - delay) / (cascadeSpreadEnd - delay)));
       const screenHalfWidth = screen.clientWidth * cascadeFinalScale / 2;
       const screenHalfHeight = screen.clientHeight * cascadeFinalScale / 2;
       const horizontalDirection = Math.sign(Number(screen.dataset.cascadeX ?? 0));
@@ -101,7 +104,8 @@ for (const scene of cascadeScenes) {
       screen.style.setProperty("--cascade-y", `${y}px`);
       screen.style.setProperty("--cascade-scale", String(scale));
     });
-    copy.style.setProperty("--cascade-copy-opacity", String(Math.min(1, Math.max(0, (progress - 0.34) / 0.42))));
+    const copyProgress = (progress - cascadeCopyStart) / (cascadeCopyEnd - cascadeCopyStart);
+    copy.style.setProperty("--cascade-copy-opacity", String(Math.min(1, Math.max(0, copyProgress))));
   };
 
   const schedule = () => {

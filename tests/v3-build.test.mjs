@@ -72,7 +72,7 @@ test("v3 production HTML preserves the landing contract", async () => {
   assert.doesNotMatch(html, /palitra-orbit|orbit-horizontal|orbit-vertical/);
   assert.match(
     html,
-    /<section\b[^>]*\bid="palitra-screen-cascade"[^>]*>[\s\S]*class="palitra-cascade-heading"[\s\S]*<h2>Управление в привычном чате AI-агента<\/h2>/,
+    /<section\b[^>]*\bid="palitra-screen-cascade"[^>]*>[\s\S]*class="palitra-cascade-heading shell"[\s\S]*<h2>Управление в привычном чате AI-агента<\/h2>/,
   );
   assert.doesNotMatch(html, /palitra-chat-screen/);
   assert.match(html, /доступен 24\/7 и знает всё о вашей рекламе и нашей работе над ней/);

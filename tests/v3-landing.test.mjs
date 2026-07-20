@@ -482,9 +482,9 @@ test("the full landing uses one Palitra screenshot sequence", async () => {
   assert.doesNotMatch(indexPage, /import PalitraChat from/);
   assert.doesNotMatch(indexPage, /id="palitra-chat"/);
   assert.match(indexPage, /id="palitra"[\s\S]*id="palitra-screen-cascade"[\s\S]*id="cases"/);
-  assert.match(component, /class="palitra-cascade-heading"/);
+  assert.match(component, /class="palitra-cascade-heading shell"/);
   assert.match(component, /<h2>Управление в привычном чате AI-агента<\/h2>/);
-  assert.match(component, /class="palitra-cascade-heading"[\s\S]*data-palitra-cascade-stage/);
+  assert.match(component, /class="palitra-cascade-heading shell"[\s\S]*data-palitra-cascade-stage/);
   assert.match(
     css,
     /\.palitra-cascade-heading h2\s*\{[^}]*text-align:\s*center/s,
@@ -567,12 +567,38 @@ test("palitra screen cascade has six approved static screens and an isolated pre
   assert.match(css, /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*\.palitra-cascade-screens\s*\{[^}]*display:\s*grid/s);
   assert.match(script, /const cascadeFinalScale = 0\.2;/);
   assert.match(script, /const cascadeEdgeGap = 16;/);
+  assert.match(siteScript, /const cascadeSpreadEnd = 0\.68;/);
+  assert.match(siteScript, /const cascadeCopyStart = 0\.76;/);
+  assert.match(siteScript, /const cascadeCopyEnd = 0\.94;/);
   assert.match(script, /const screensCanvas = scene\.querySelector<HTMLElement>\("\.palitra-cascade-screens"\);/);
   assert.match(script, /const copyHalfWidth = copy\.clientWidth \/ 2;/);
   assert.match(script, /const canvasHalfWidth = screensCanvas\.clientWidth \/ 2;/);
   assert.match(script, /const finalX = horizontalDirection \* Math\.min\(copyHalfWidth \+ screenHalfWidth \+ cascadeEdgeGap, canvasHalfWidth - screenHalfWidth\);/);
   assert.match(script, /const finalY = verticalDirection \* Math\.min\(copyHalfHeight \+ screenHalfHeight \+ cascadeEdgeGap, canvasHalfHeight - screenHalfHeight\);/);
-  assert.match(css, /\[data-palitra-cascade\]\[data-cascade-ready="true"\] \.palitra-cascade-stage\s*\{[^}]*width:\s*100vw[^}]*margin-left:\s*calc\(50% - 50vw\)/s);
+  assert.match(
+    siteScript,
+    /const local = Math\.min\(1, Math\.max\(0, \(progress - delay\) \/ \(cascadeSpreadEnd - delay\)\)\);/,
+  );
+  assert.match(
+    siteScript,
+    /const copyProgress = \(progress - cascadeCopyStart\) \/ \(cascadeCopyEnd - cascadeCopyStart\);/,
+  );
+  assert.match(component, /class="palitra-cascade-shell" data-palitra-cascade/);
+  assert.match(component, /class="palitra-cascade-heading shell"/);
+  assert.doesNotMatch(component, /class="palitra-cascade-shell shell"/);
+  assert.match(
+    css,
+    /\[data-palitra-cascade\]\[data-cascade-ready="true"\] \.palitra-cascade-stage\s*\{[^}]*width:\s*100%/s,
+  );
+  assert.doesNotMatch(
+    css,
+    /\[data-palitra-cascade\]\[data-cascade-ready="true"\] \.palitra-cascade-stage\s*\{[^}]*width:\s*100vw|margin-left:\s*calc\(50% - 50vw\)/s,
+  );
+  assert.match(
+    css,
+    /\.palitra-cascade-screens\s*\{[^}]*width:\s*min\(calc\(100% - \(var\(--gutter\) \* 2\)\),\s*1280px\)[^}]*margin-inline:\s*auto/s,
+  );
+  assert.match(css, /\.site-footer\s*\{[^}]*width:\s*100%[^}]*max-width:\s*none/s);
   assert.doesNotMatch(css, /\.palitra-screen-cascade\s*\{[^}]*min-height:\s*280svh/s);
   assert.doesNotMatch(css, /\.palitra-cascade-shell\s*\{[^}]*min-height:/s);
   assert.match(css, /\[data-palitra-cascade\]\[data-cascade-ready="true"\]\s*\{[^}]*min-height:\s*300svh/s);
