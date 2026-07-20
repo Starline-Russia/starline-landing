@@ -197,10 +197,19 @@ test("services has no eyebrow and a standalone component preview", async () => {
     path.join(v3Root, "src", "components", "Services.astro"),
     "utf8",
   );
+  const css = await readFile(
+    path.join(v3Root, "src", "styles", "global.css"),
+    "utf8",
+  );
   const previewPath = path.join(v3Root, "src", "pages", "preview", "services.astro");
   const pageFiles = await collectFiles(path.join(v3Root, "src", "pages"), ".astro");
 
   assert.doesNotMatch(services, /class="eyebrow"/);
+  assert.match(css, /\.services \.section-lead\s*\{[^}]*font-size:\s*22px/);
+  assert.match(
+    css,
+    /@media \(max-width:\s*640px\)[\s\S]*?\.services \.section-lead\s*\{[^}]*font-size:\s*17px/,
+  );
   assert.ok(pageFiles.includes(previewPath), "standalone Services preview should exist");
 
   const preview = await readFile(previewPath, "utf8");
@@ -242,7 +251,23 @@ test("industries has an editorial grid and a standalone component preview", asyn
   assert.doesNotMatch(industries, /data-primary/);
   assert.doesNotMatch(industries, /marquee|animation|scroll/i);
   assert.match(css, /\.industries-heading > p\s*\{[^}]*font-size:\s*22px/s);
+  assert.match(
+    css,
+    /\.industries \.eyebrow,\s*\.market-problem \.eyebrow,\s*\.cohorts \.eyebrow,\s*\.economics \.eyebrow,\s*\.palitra \.eyebrow\s*\{[^}]*font-size:\s*18px/s,
+  );
   assert.match(css, /\.industry-grid\s*\{[^}]*border-top:/s);
+  assert.match(
+    css,
+    /\.industry-grid\s*\{[^}]*grid-template-columns:\s*repeat\(3,\s*minmax\(0,\s*1fr\)\)[^}]*column-gap:\s*clamp\(28px,\s*3vw,\s*48px\)/s,
+  );
+  assert.match(
+    css,
+    /\.industry-card h3\s*\{[^}]*font-size:\s*clamp\(28px,\s*2\.5vw,\s*42px\)[^}]*line-height:\s*1\.12/s,
+  );
+  assert.match(
+    css,
+    /@media \(max-width:\s*640px\)[\s\S]*?\.industries \.eyebrow,\s*\.market-problem \.eyebrow,\s*\.cohorts \.eyebrow,\s*\.economics \.eyebrow,\s*\.palitra \.eyebrow\s*\{[^}]*font-size:\s*14px/s,
+  );
   assert.match(css, /\.industry-card:hover h3\s*\{[^}]*color:\s*var\(--violet\)[^}]*transform:\s*scale\(1\.035\)/s);
   assert.doesNotMatch(css, /\.industry-grid::after|radial-gradient\(circle 20px at var\(--pointer-x\)/);
   assert.doesNotMatch(css, /\.industry-card\s*\{[^}]*border-radius/s);
@@ -322,10 +347,10 @@ test("services use the approved taxonomy, order, descriptions, and channel label
   ]);
 });
 
-test("services lead copy uses an explicit 18px desktop font size", async () => {
+test("services lead copy uses an explicit 22px desktop font size", async () => {
   const css = await readFile(path.join(v3Root, "src", "styles", "global.css"), "utf8");
 
-  assert.match(css, /\.services \.section-lead\s*\{[^}]*font-size:\s*18px/s);
+  assert.match(css, /\.services \.section-lead\s*\{[^}]*font-size:\s*22px/s);
 });
 
 test("cohorts explains the latest cohort with an interactive matrix", async () => {

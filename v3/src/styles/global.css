@@ -160,7 +160,7 @@ button:disabled, input:disabled { opacity: 0.55; cursor: not-allowed; }
 .cohort-cell-pointer-head { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5; }
 
 .services { color: var(--white); background: var(--night); }
-.services .section-lead { font-size: 18px; }
+.services .section-lead { font-size: 22px; }
 .service-list { margin-top: 70px; border-top: 1px solid var(--line); }
 .service-item { border-bottom: 1px solid var(--line); }
 .service-toggle { display: grid; grid-template-columns: 70px 1fr 58px; align-items: center; width: 100%; min-height: 112px; padding: 0; color: var(--white); border: 0; background: transparent; text-align: left; cursor: pointer; }
@@ -178,14 +178,19 @@ button:disabled, input:disabled { opacity: 0.55; cursor: not-allowed; }
 .industries { position: relative; overflow: hidden; padding-block: var(--section-space); color: var(--white); background: var(--night); }
 .industries::before { position: absolute; inset: 0; content: ""; opacity: 0.34; background: radial-gradient(circle at 82% 17%, rgba(63, 9, 177, 0.58), transparent 32%); pointer-events: none; }
 .industries-inner { position: relative; z-index: 1; }
+.industries .eyebrow,
+.market-problem .eyebrow,
+.cohorts .eyebrow,
+.economics .eyebrow,
+.palitra .eyebrow { font-size: 18px; }
 .industries-heading { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.7fr); gap: 70px; align-items: center; }
 .industries-heading h2 { margin-bottom: 0; font-size: clamp(42px, 5.1vw, 78px); font-weight: 600; line-height: 1.03; }
 .industries-heading h2 span { color: var(--violet); }
 .industries-heading > p { max-width: 570px; margin: 0; color: rgba(255, 255, 255, 0.72); font-size: 22px; }
-.industry-grid { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 72px; border-top: 1px solid rgba(255, 255, 255, 0.18); }
+.industry-grid { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: clamp(28px, 3vw, 48px); margin-top: 72px; border-top: 1px solid rgba(255, 255, 255, 0.18); }
 .industry-grid::before { position: absolute; right: 0; bottom: 0; left: 0; height: 1px; content: ""; background: rgba(255, 255, 255, 0.18); }
 .industry-card { display: flex; align-items: center; min-height: 142px; padding: 32px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.18); }
-.industry-card h3 { margin: 0; color: rgba(255, 255, 255, 0.82); font-size: clamp(30px, 3.2vw, 52px); font-weight: 500; line-height: 1.06; transform-origin: left center; transition: color 180ms ease, transform 180ms ease; }
+.industry-card h3 { margin: 0; color: rgba(255, 255, 255, 0.82); font-size: clamp(28px, 2.5vw, 42px); font-weight: 500; line-height: 1.12; transform-origin: left center; transition: color 180ms ease, transform 180ms ease; }
 .industry-card:hover h3 { color: var(--violet); transform: scale(1.035); }
 
 .market-problem { padding-block: clamp(96px, 8vw, 128px); background: var(--paper); }
@@ -445,6 +450,11 @@ html[data-cascade-expanded="true"] {
   .matrix i, .matrix em { min-height: 38px; }
   .section-heading h2, .economics-heading h2, .market-problem-copy h2, .lead h2 { font-size: 40px; }
   .services .section-lead { font-size: 17px; }
+  .industries .eyebrow,
+  .market-problem .eyebrow,
+  .cohorts .eyebrow,
+  .economics .eyebrow,
+  .palitra .eyebrow { font-size: 14px; }
   .service-list { margin-top: 50px; }
   .service-toggle { grid-template-columns: 42px 1fr 42px; min-height: 92px; }
   .service-title { font-size: 25px; }
