@@ -52,6 +52,8 @@ test("v4 page shell exposes accessible metadata and assembles the hero checkpoin
 
   assert.match(layout, /lang="ru"/);
   assert.match(layout, /viewport-fit=cover/);
+  assert.match(layout, /rel="icon"/);
+  assert.match(layout, /href="\/assets\/logo\/8-1-peach\.png"/);
   assert.match(layout, /class="skip-link"/);
   assert.match(layout, /Source\+Serif\+4/);
   assert.match(layout, /family=Inter/);
@@ -85,6 +87,7 @@ test("v4 keeps navigation and hero copy in a typed site data module", async () =
   const siteData = await source("v4/src/data/site.ts");
 
   assert.match(siteData, /export const navigation/);
+  assert.match(siteData, /title:\s*["']Рост e-commerce — это система, а не набор каналов\.["']/);
   assert.match(siteData, /export const heroArtifacts/);
   assert.match(siteData, /10\+/);
   assert.match(siteData, /50\+/);
@@ -93,17 +96,73 @@ test("v4 keeps navigation and hero copy in a typed site data module", async () =
   assert.doesNotMatch(siteData, /50\+\s+(?:проект|клиент)/i);
 });
 
+test("v4 keeps the exact approved About copy in typed site data", async () => {
+  const siteData = await source("v4/src/data/site.ts");
+  const expectedCopy = [
+    "Starline - команда профессионалов с опытом работы в ведущих performance-агентствах и западных технологических компаниях.",
+    "За десятилетия работы каждый прошел путь с нуля до управленческих позиций.",
+    "Знаем изнутри, как работать с крупнейшими рекламодателями в различных отраслях, все тонкости процессов создания и ведения рекламных кампаний, особенности проведения тендеров и нюансы клиентского сервиса.",
+    "Понимаем, как performance встраивается в маркетинговую воронку, какие задачи решает и какие стратегии будут наиболее эффективны для поставленных задач.",
+    "Впитав все лучшие подходы к построению команд, разработке стратегий, созданию лучшего клиентского сервиса мы горим желанием переосмыслить этот процесс и добавить свежий взгляд.",
+    "2026 год - точка пересборки для многих компаний, поэтому мы находимся в правильное время в правильном месте.",
+    "Агентство Старлайн создано в рамках гк Старлинк.",
+    "Ресурсы, возможности и опыт группы компаний позволит реализовать все задуманные идеи в полной мере.",
+  ];
+
+  assert.match(siteData, /export const about/);
+  assert.match(siteData, /title:\s*["']О нас["']/);
+  for (const copy of expectedCopy) {
+    assert.ok(siteData.includes(copy), `missing exact About copy: ${copy}`);
+  }
+});
+
+test("v4 renders one shared responsive About component on the page and preview route", async () => {
+  const component = await source("v4/src/components/About.astro");
+  const page = await source("v4/src/pages/index.astro");
+  const preview = await source("v4/src/pages/preview/about.astro");
+  const css = await source("v4/src/styles/global.css");
+
+  assert.match(component, /import\s+\{\s*about\s*\}\s+from\s+["']\.\.\/data\/site["']/);
+  assert.match(component, /<section\s+class="about site-shell"\s+id="about"/);
+  assert.match(component, /aria-labelledby="about-title"/);
+  assert.match(component, /<h2\s+id="about-title"/);
+  assert.match(component, /about\.story\.map/);
+  assert.match(component, /about\.groupContext\.map/);
+
+  assert.match(page, /import About from ["']\.\.\/components\/About\.astro["']/);
+  assert.match(page, /<About\s*\/>/);
+  assert.ok(page.indexOf("<Hero />") < page.indexOf("<About />"));
+
+  assert.match(preview, /import About from ["']\.\.\/\.\.\/components\/About\.astro["']/);
+  assert.match(preview, /<About\s*\/>/);
+  assert.doesNotMatch(preview, /<section\s+class="about/);
+
+  assert.match(css, /\.about\s*\{/);
+  assert.match(css, /\.about__story\s*\{/);
+  assert.match(
+    css,
+    /\.about__paragraph--lead\s*\{[^}]*min-width:\s*0[^}]*overflow-wrap:\s*anywhere/,
+  );
+  assert.match(css, /@media\s*\(min-width:\s*60rem\)[\s\S]*\.about__group/);
+});
+
 test("v4 header uses one accessible DOM tree for mobile menu and scroll morph", async () => {
   const header = await source("v4/src/components/SiteHeader.astro");
+  const css = await source("v4/src/styles/global.css");
 
   assert.equal(header.match(/<header\b/g)?.length, 1);
+  assert.equal(header.match(/<a\s+class="site-header__brand"(?=\s|>)/g)?.length, 1);
   assert.match(header, /data-site-header/);
+  assert.match(header, /<img\s+class="site-header__brand-mark"/);
+  assert.match(header, /src="\/assets\/logo\/8-1-peach\.png"/);
+  assert.match(header, /alt=""/);
   assert.match(header, /data-nav-toggle/);
   assert.match(header, /aria-expanded="false"/);
   assert.match(header, /aria-controls="site-navigation"/);
   assert.match(header, /data-site-nav/);
   assert.match(header, /hero\.primaryAction\.label/);
   assert.doesNotMatch(header, /<header[\s\S]*<header/);
+  assert.match(css, /\.site-header__brand-mark\s*\{[^}]*object-fit:\s*contain/);
 });
 
 test("v4 hero is semantic, factual, and uses the approved logo reveal", async () => {

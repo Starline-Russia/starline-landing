@@ -1,0 +1,25 @@
+---
+import { about } from "../data/site";
+---
+
+<section class="about site-shell" id="about" aria-labelledby="about-title">
+  <div class="about__layout">
+    <header class="about__header">
+      <h2 id="about-title" class="about__title">{about.title}</h2>
+    </header>
+
+    <div class="about__story">
+      {about.story.map((paragraph, index) => (
+        <p class={index === 0 ? "about__paragraph about__paragraph--lead" : "about__paragraph"}>
+          {paragraph}
+        </p>
+      ))}
+    </div>
+
+    <aside class="about__group" aria-label="Связь с группой компаний">
+      {about.groupContext.map((paragraph) => (
+        <p>{paragraph}</p>
+      ))}
+    </aside>
+  </div>
+</section>

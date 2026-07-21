@@ -317,10 +317,9 @@ textarea {
 }
 
 .site-header__brand-mark {
-  width: var(--space-xs);
-  height: var(--space-xs);
-  background: var(--color-sienna);
-  transform: rotate(45deg);
+  width: 1.75rem;
+  height: 1.75rem;
+  object-fit: contain;
 }
 
 .site-header__toggle {
@@ -741,6 +740,75 @@ html[data-enhanced][data-ready="true"] .hero__visual {
   font-size: var(--text-sm);
 }
 
+.about {
+  scroll-margin-block-start: calc(var(--header-height) + var(--space-lg));
+  padding-block: var(--space-3xl);
+  border-block-start: var(--rule-thin) solid var(--color-rule);
+}
+
+.about__layout {
+  display: grid;
+  gap: var(--space-2xl);
+}
+
+.about__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.about__header::after {
+  flex: 1;
+  height: var(--rule-thin);
+  background: var(--color-rule);
+  content: "";
+}
+
+.about__title {
+  flex: none;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0;
+  line-height: var(--line-body);
+}
+
+.about__story {
+  display: grid;
+  gap: var(--space-lg);
+  max-width: var(--measure-text);
+}
+
+.about__paragraph {
+  max-width: 68ch;
+  text-wrap: pretty;
+}
+
+.about__paragraph--lead {
+  min-width: 0;
+  max-width: 42ch;
+  overflow-wrap: anywhere;
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-display);
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.about__group {
+  display: grid;
+  gap: var(--space-md);
+  padding-block-start: var(--space-lg);
+  border-block-start: var(--rule-thin) solid var(--color-ink);
+}
+
+.about__group p {
+  max-width: 44ch;
+  font-size: var(--text-sm);
+  text-wrap: pretty;
+}
+
 @media (min-width: 40rem) {
   .hero__layout {
     gap: var(--space-xl);
@@ -856,6 +924,29 @@ html[data-enhanced][data-ready="true"] .hero__visual {
   .hero__fact:last-child {
     padding-inline-end: 0;
     border-inline-end: 0;
+  }
+
+  .about {
+    padding-block: var(--space-4xl);
+  }
+
+  .about__layout {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-lg);
+  }
+
+  .about__header {
+    grid-column: 1 / 13;
+  }
+
+  .about__story {
+    grid-column: 2 / 10;
+  }
+
+  .about__group {
+    grid-column: 7 / 13;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-lg);
   }
 }
 
